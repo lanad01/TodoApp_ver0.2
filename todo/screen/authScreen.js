@@ -83,7 +83,7 @@ export const authScreen = ({ navigation }) => {
       );
     });
   };
-  
+
   //일반 로그인 
   const login = () => {
     console.log('pwd : ' + pwd + ' id : ' + id);
@@ -261,7 +261,7 @@ export const authScreen = ({ navigation }) => {
           <Text style={styles.loginBtn}> 로 그 인 </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.push('Assign')}
+          onPress={() => navigation.navigate('AssignRoot')}
           style={styles.loginBtnContainer}>
           <Text style={styles.loginBtn}> 회 원 가 입</Text>
         </TouchableOpacity>

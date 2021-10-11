@@ -4,5 +4,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_splash"
     android:gravity="fill"
+    
     android:orientation="vertical">
 </LinearLayout>

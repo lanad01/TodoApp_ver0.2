@@ -37,12 +37,11 @@ export const MainScreen = props => {
     }).catch(err => {
       console.log('Error occur in promise' + err);
     });
-
     myFirstPromise.then(result => {
-      console.log('Result ' + result.count);
       setNumber_of_task(result.count);
     });
   };
+
   //Task Badge 값 받아오기
   React.useEffect(() => {
     CREATE_TASK_TABLE();
@@ -59,10 +58,10 @@ export const MainScreen = props => {
     return () => {};
   }, [number_of_task]);
 
+  //로그아웃 버튼 Alert창
   function logOutConfirm() {
     Alert.alert(
-      '로그아웃하시겠습니까?',
-      '',
+      '로그아웃하시겠습니까?', '',
       [
         {
           text: '아니오',
@@ -76,6 +75,7 @@ export const MainScreen = props => {
       { cancelable: false },
     );
   }
+
   //로그아웃 실행
   const logOutImple = async () => {
     console.log('로그인 루트 ?' + authContext.login_route);

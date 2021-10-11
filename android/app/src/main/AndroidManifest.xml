@@ -13,8 +13,8 @@
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
-      android:roundIcon="@mipmap/ic_launcher_round"
+      android:icon="@mipmap/splash_icon"
+      android:roundIcon="@mipmap/splash_icon"
       android:allowBackup="true"
       android:theme="@style/AppTheme">
       <activity
@@ -53,6 +53,8 @@
         </intent-filter>
       </activity>
 
+
+      <!-- Push Noti 관련 -->
        <!-- Change the value to true to enable pop-up for in foreground on receiving remote notifications (for prevent duplicating while showing local notifications set this to false) -->
       <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground"
                     android:value="false"/>
@@ -70,6 +72,7 @@
           </intent-filter>
       </receiver>
 
+      <!-- Clout MEssaging 관련 -->
       <service
         android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
         android:exported="false" >
@@ -77,5 +80,6 @@
             <action android:name="com.google.firebase.MESSAGING_EVENT" />
         </intent-filter>
       </service>
+
     </application>
 </manifest>

@@ -2,6 +2,7 @@ import SQLite from 'react-native-sqlite-storage';
 import moment from 'moment';
 import PushNotification from 'react-native-push-notification';
 import { BACKGROUND_ALARM_ABOUT_TO_EXPIRED_DATE } from './pushAlarm';
+import AsyncStorage from '@react-native-community/async-storage';
 export const DB = SQLite.openDatabase(
   {
     name: 'testDB5',
@@ -170,7 +171,44 @@ export const KAKAO_LOGIN = async userInfo => {
     });
   };
 };
-
+export const INSERT_USER_INFO = id => {
+  const user_data = {
+    id : '',
+    pwd : '',
+    job : '',
+    name : '',
+    email : '',
+    image : '',
+    regi_date : null,
+    job : '',
+    user_no : 0
+  }
+  DB.transaction(tx => {
+    tx.executeSql(
+      'SELECT id, pwd, job, name, email, image, regi_date, job, user_no FROM user_info WHERE id=?',
+      [id],
+      (tx, res) => {
+        console.log('select success');
+        let user = res.rows.item(0).user_no;
+        console.log('user_no : ' + user); 
+        let selected = res.rows;
+        user_data.user_no = user;
+        user_data.id = selected.item(0).id;
+        user_data.pwd = selected.item(0).pwd;
+        user_data.name = selected.item(0).name;
+        user_data.email = selected.item(0).email;
+        user_data.job = selected.item(0).job;
+        user_data.regi_date = selected.item(0).regi_date;
+        user_data.image = selected.item(0).image;
+        console.log('image');
+      },
+      error => {
+        console.log('Select Failed' + error);
+      },
+    );
+  });
+  return user_data
+}
 export const UPDATE_USER_INFO = info => {
   DB.transaction(tx => {
     tx.executeSql(

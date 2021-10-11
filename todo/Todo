@@ -1,6 +1,5 @@
 - 디렉토리 정리
-- DB 모듈화 가능성 검토
-- 
+- DB 모듈화 BY PROMIST 진행 필요
 
 
 
@@ -13,3 +12,6 @@
  : autologin 설정
  : back ground notification
  : Push alarm Modulization
+
+ -Did List / 1010 
+: DB Modulization
