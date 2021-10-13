@@ -135,19 +135,12 @@ export const INSERT_USER_BY_SOCIAL_LOGIN = async (userInfo, type) => {
     user_data.id = userInfo.user.id
     user_data.email = userInfo.user.email
     user_data.name = userInfo.user.name
-    console.log("GOOGLE INSERT USER INFO CHECK  " + user_data.id) 
-    console.log("GOOGLE INSERT USER INFO CHECK  " + user_data.email) 
-    console.log("GOOGLE INSERT USER INFO CHECK  " + user_data.name) 
     user_data.image = null
   }else if(type=='kakao'){
     user_data.id=userInfo.id
     user_data.name=userInfo.nickname
     user_data.email=userInfo.email
     user_data.image=userInfo.profileImageUrl
-    console.log("KAKAO INSERT USER INFO CHECK : "+user_data.id)
-    console.log("KAKAO INSERT USER INFO CHECK : "+user_data.name)
-    console.log("KAKAO INSERT USER INFO CHECK : "+user_data.email)
-    console.log("KAKAO INSERT USER INFO CHECK : "+user_data.image)
   }
   
   console.log('Login type  : ' + type);
@@ -258,7 +251,6 @@ export const SELECT_USER_INFO_BY_USERNO = user_no => {
         let user = res.rows.item(0).user_no;
         console.log('user_no : ' + user);
         let selected = res.rows;
-        user_data.user_no = user;
         user_data.id = selected.item(0).id;
         user_data.pwd = selected.item(0).pwd;
         user_data.name = selected.item(0).name;
@@ -276,8 +268,8 @@ export const SELECT_USER_INFO_BY_USERNO = user_no => {
 };
 
 
-export const SELECT_USER_INFO_BY_ID = id => {
-  console.log("SELECT USER INFO BY ID ID: "+id)
+export const SELECT_USER_INFO_BY_ID = async id => {
+  console.log("SELECT USER INFO BY ID / ID: "+id)
   const user_data = {
     id: '',
     pwd: '',
@@ -285,31 +277,30 @@ export const SELECT_USER_INFO_BY_ID = id => {
     name: '',
     email: '',
     image: null,
-    regi_date: null,
+    regi_date: '',
     job: '',
-    user_no: null,
+    user_no: 0,
   };
-  DB.transaction(tx => {
+  await DB.transaction(tx => {
     tx.executeSql(
       'SELECT id, pwd, job, name, email, image, regi_date, job, user_no FROM user_info WHERE id=?',
       [id],
       (tx, res) => {
-        let user = res.rows.item(0).user_no;
-        let selected = res.rows;
-        user_data.user_no = user;
-        user_data.id = selected.item(0).id;
-        user_data.pwd = selected.item(0).pwd;
-        user_data.name = selected.item(0).name;
-        user_data.email = selected.item(0).email;
-        user_data.job = selected.item(0).job;
-        user_data.regi_date = selected.item(0).regi_date;
-        user_data.image = selected.item(0).image;
+        user_data.id = res.rows.item(0).id;
+        user_data.user_no = res.rows.item(0).user_no;
+        user_data.pwd = res.rows.item(0).pwd;
+        user_data.name = res.rows.item(0).name;
+        user_data.email = res.rows.item(0).email;
+        user_data.job = res.rows.item(0).job;
+        user_data.regi_date = res.rows.item(0).regi_date;
+        user_data.image = res.rows.item(0).image;
       },
       error => {
         console.log('Select Failed' + error);
       },
     );
   });
+  
   return user_data;
 };
 

@@ -36,7 +36,7 @@ import { Loading } from '../modal/Loading';
 export const authScreen = ({ navigation }) => {
   const authContext = React.useContext(AuthContext);
   const [loginErrorModal, setLoginErrorModal] = React.useState(false); //로그인 아이디 비밀번호 비일치 시
-  const [loginNotNullModal, setLoginNotNullModal] = React.useState(false); //로그인 아이디 비밀번호 null발생 시
+  const [loginNotNullModal, setLoginNotNullModal] = React.useState(false); // 아이디 비밀번호 null발생 시
   const [pwdErrorModal, setPwdErrorModal] = React.useState(false); //비밀번호만 오류일 시
   const [loading, setLoading] = React.useState(false); //로딩화면
   const [id, setId] = React.useState('Aldne');
@@ -72,7 +72,6 @@ export const authScreen = ({ navigation }) => {
 
   //자동로그인 시 authContext에 저장하기 위한 user정보
   const getInfoWhenAutoLogin = user_no => {
-    
     let getUserInfo = new Promise((resolve, reject) => {
       //자동로그인 된 user_no와 일치하는 data select
       const userInfo = SELECT_USER_INFO_BY_USERNO(user_no);
@@ -91,7 +90,7 @@ export const authScreen = ({ navigation }) => {
       authContext.job = userInfo.job;
       authContext.autologin = true; //자동로그인이므로 autologin값 true
       authContext.user_no = userInfo.user_no;
-      // AsyncStorage.setItem('user_no', JSON.stringify(authContext.user_no)); - 이미 존재하므로 필요없다
+      // AsyncStorage.setItem('user_no', JSON.stringify(authContext.user_no)); - 이미 존재 필요없다
       authContext.image = userInfo.image;
       navigation.replace('MainScreen');
     });
@@ -127,7 +126,9 @@ export const authScreen = ({ navigation }) => {
           }
         });
       }
-    } catch (err) { console.log("일반 로그인 오류 "+err)   }
+    } catch (err) {
+      console.log('일반 로그인 오류 ' + err);
+    }
   };
 
   //일반 로그인 성공 시 context에 담을 user 정보 get
@@ -141,7 +142,7 @@ export const authScreen = ({ navigation }) => {
       console.log('Error occur in promise' + JSON.stringify(err));
     });
     getUserInfo.then(userInfo => {
-      AsyncStorage.setItem('user_no', JSON.stringify(userInfo.user_no)); // 자동로그인이 아니므로 필요하다
+      AsyncStorage.setItem('user_no', JSON.stringify(userInfo.user_no)); // 자동로그인이 아니므로 필요
       // context 값 선언 방법 변경 권장 export
       authContext.id = userInfo.id;
       authContext.pwd = userInfo.pwd;
@@ -164,35 +165,37 @@ export const authScreen = ({ navigation }) => {
     try {
       await GoogleSignin.hasPlayServices(); //구글로그인 아이디선택
       const googleUserInfo = await GoogleSignin.signIn(); //선택한 구글 아이디의 정보 객체
-      let userIdFromGoogle = googleUserInfo.user.id; //선택한 구글 아이디의 ID 정보 (Ex : 10825657342564)
+      let userIdFromGoogle = googleUserInfo.user.id; //선택한 구글 아이디의 ID 정보 
       GOOGLE_LOGIN(googleUserInfo); //로그인 이력 여부에 따라 새로 INSERT or SELECT
       console.log('userId  : ' + userIdFromGoogle);
       if (userIdFromGoogle != null) {
         //구글로그인 성공
-        let getUserInfo = new Promise((resolve, reject) => {
-          const userInfo = SELECT_USER_INFO_BY_ID(userIdFromGoogle);
-          setTimeout(() => {
-            resolve(userInfo);
-          }, 1000);
-        }).catch(err => {
-          console.log('Error occur in promise' + JSON.stringify(err));
-        });
-        getUserInfo.then(userInfo => {
-          console.log('GET USER INFO BY GG ID SUCCESS');
-          AsyncStorage.setItem('user_no', JSON.stringify(userInfo.user_no)); // 자동로그인이 아니므로 필요하다
-          // context 값 선언 방법 변경 권장 export
-          authContext.id = userInfo.id;
-          authContext.pwd = userInfo.pwd;
-          authContext.name = userInfo.name;
-          authContext.email = userInfo.email;
-          authContext.job = userInfo.job;
-          authContext.regi_date = userInfo.regi_date;
-          authContext.image = userInfo.image;
-          authContext.autologin = false;
-          authContext.user_no = userInfo.user_no;
-          authContext.login_route = 'google'; // 구글로그인 루트 설정
-          navigation.replace('MainScreen');
-        });
+        setTimeout(() => {
+          let getUserInfo = new Promise((resolve, reject) => {
+            const userInfo = SELECT_USER_INFO_BY_ID(userIdFromGoogle).json();
+            setTimeout(() => {
+              resolve(userInfo);
+            }, 1000);
+          }).catch(err => {
+            console.log('Error occur in promise' + JSON.stringify(err));
+          });
+          getUserInfo.then(userInfo => {
+            console.log('GET USER INFO BY GG ID SUCCESS');
+            AsyncStorage.setItem('user_no', JSON.stringify(userInfo.user_no)); // 필요
+            // context 값 선언 방법 변경 권장 export
+            authContext.id = userInfo.id;
+            authContext.pwd = userInfo.pwd;
+            authContext.name = userInfo.name;
+            authContext.email = userInfo.email;
+            authContext.job = userInfo.job;
+            authContext.regi_date = userInfo.regi_date;
+            authContext.image = userInfo.image;
+            authContext.autologin = false;
+            authContext.user_no = userInfo.user_no;
+            authContext.login_route = 'google'; // 구글로그인 루트 설정
+            navigation.replace('MainScreen');
+          });
+        }, 1000);
       } else if (userIdFromGoogle == null) {
         //구글 ID가 NULL
         alert('구글로그인 실패');
@@ -209,35 +212,40 @@ export const authScreen = ({ navigation }) => {
       if (token != null) {
         // 카카오 로그인 성공
         const userInfo = await getKakaoProfile();
-        await KAKAO_LOGIN(userInfo);
-        let getUserInfo = new Promise((resolve, reject) => {
-          const user_data_from_db = SELECT_USER_INFO_BY_ID(userInfo.id);
-          setTimeout(() => {
-            resolve(user_data_from_db);
-          }, 2000);
-        }).catch(err => {
-          console.log('Error occur in promise' + JSON.stringify(err));
-        });
-        getUserInfo.then(user_data_from_db => {
-          // 자동로그인이 Asyncstorage 필요
-          AsyncStorage.setItem('user_no', JSON.stringify(user_data_from_db.user_no)); 
-          // context 값 선언 방법 변경 권장 export
-          authContext.id = user_data_from_db.id;
-          authContext.pwd = user_data_from_db.pwd;
-          authContext.name = user_data_from_db.name;
-          authContext.email = user_data_from_db.email;
-          authContext.job = user_data_from_db.job;
-          authContext.regi_date = user_data_from_db.regi_date;
-          authContext.image = user_data_from_db.image;
-          authContext.autologin = false; // 직접 누른 것이니 autologin false
-          authContext.user_no = user_data_from_db.user_no;
-          authContext.login_route = 'kakao'; // 카카오 로그인 루트 설정
-          console.log(authContext.id)
-          console.log(authContext.pwd)
-          console.log(authContext.name)
-          console.log(authContext.email)
-          navigation.replace('MainScreen');
-        });
+
+        setLoading(true);
+        KAKAO_LOGIN(userInfo);
+        setTimeout(() => {
+          let getUserInfo = new Promise((resolve, reject) => {
+            const user_data_from_db = SELECT_USER_INFO_BY_ID(userInfo.id);
+            setTimeout(() => {
+              resolve(user_data_from_db);
+            }, 1000);
+          }).catch(err => {
+            console.log('Error occur in promise' + JSON.stringify(err));
+          });
+          getUserInfo.then(user_data_from_db => {
+            // 자동로그인이 Asyncstorage 필요
+            AsyncStorage.setItem(
+              'user_no',
+              JSON.stringify(user_data_from_db.user_no),
+            );
+            // context 값 선언 방법 변경 권장 export
+            authContext.id = user_data_from_db.id;
+            authContext.pwd = user_data_from_db.pwd;
+            authContext.name = user_data_from_db.name;
+            authContext.email = user_data_from_db.email;
+            authContext.job = user_data_from_db.job;
+            authContext.regi_date = user_data_from_db.regi_date;
+            authContext.image = user_data_from_db.image;
+            authContext.autologin = false; // 직접 누른 것이니 autologin false
+            authContext.user_no = user_data_from_db.user_no;
+            authContext.login_route = 'kakao'; // 카카오 로그인 루트 설정
+            navigation.replace('MainScreen');
+          });
+          getUserInfo
+          .then(setLoading(false));
+        }, 1000);
       } else if (token == null) {
         console.log('Kakao Token Null');
       }
@@ -245,6 +253,7 @@ export const authScreen = ({ navigation }) => {
       console.log('KaKao Login Error' + err);
     }
   };
+  // DELETE_TEMP()
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.headerText}> TO DO LIST</Text>
@@ -280,7 +289,7 @@ export const authScreen = ({ navigation }) => {
           color={GoogleSigninButton.Color.Dark}
           style={{ width: 260, height: 45, marginRight: 5 }}
         />
-        <TouchableWithoutFeedback onPress={loginWithKakao}>
+        <TouchableOpacity onPress={loginWithKakao}>
           <Image
             source={require('../assets/kakao_login_medium_wide.png')}
             style={{
@@ -290,7 +299,18 @@ export const authScreen = ({ navigation }) => {
               resizeMode: 'contain',
             }}
           />
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => DELETE_TEMP()}>
+          <Image
+            source={require('../assets/kakao_login_medium_wide.png')}
+            style={{
+              width: 260,
+              height: 40,
+              marginTop: 10,
+              resizeMode: 'contain',
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <IdPwdNotNullModal
         modalOn={loginNotNullModal}
