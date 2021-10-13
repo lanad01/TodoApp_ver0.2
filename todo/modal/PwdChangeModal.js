@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {  View,  Text,  StyleSheet,  TextInput,  TouchableOpacity,   } from 'react-native';
 import Modal from 'react-native-modal';
-import { ErrorModal } from './ErrorModal';
-import { DPW } from '../dp';
+import { DPW } from '../config/dp';
+import OneButtonModal from './OneButtonModal';
 
 export const PwdChangeModal = props => {
   const [pwdInput, setPwdInput] = useState();
@@ -59,7 +52,7 @@ export const PwdChangeModal = props => {
           </View>
         </View>
       </TouchableOpacity>
-      <ErrorModal
+      <OneButtonModal
         modalOn={validFailModal}
         modalOff={() => setValidFailModal(false)}
         message={'현재 비밀번호와 일치하지않습니다.'}

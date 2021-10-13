@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { DPW } from '../../dp';
+import { DPW } from '../../config/dp';
 export const styles = StyleSheet.create({
   logoutBtn: {
     fontFamily: 'BMJUA',

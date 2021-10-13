@@ -1,8 +1,6 @@
 import SQLite from 'react-native-sqlite-storage';
 import moment from 'moment';
-import PushNotification from 'react-native-push-notification';
 import { BACKGROUND_ALARM_ABOUT_TO_EXPIRED_DATE } from './pushAlarm';
-import AsyncStorage from '@react-native-community/async-storage';
 export const DB = SQLite.openDatabase(
   {
     name: 'testDB5',
@@ -61,21 +59,25 @@ export const CREATE_USER_TABLE = () =>
     );
   });
 
-//GOOGLE LOGIN 처리. 기존 접속이력이 있는 id의경우 insert구문은 실행안됨.
-export const GOOGLE_LOGIN = userInfo => { 
-  //구글 로그인 userInfo의 경우 name, email, id가 담겨져있다. 프로필은 없다.
-  
+
+export const SOCIAL_LOGIN = (userInfo, type) => {
+  let id = ''
+  if(type=='google'){
+    id = userInfo.user.id
+  }else if(type=='kakao'){
+    id = userInfo.id
+  }
   DB.transaction(tx => {
     tx.executeSql(
       'SELECT COUNT(*) AS count FROM user_info WHERE id=?',
-      [userInfo.user.id],
+      [id],
       (tx, res) => {
         let count = res.rows.item(0).count;
-        console.log('구글아이디 중복 몇개?' + count);
         if (count > 0) {
-          console.log('Dup Exists');
+          console.log('구글 아이디 중복');
         } else if (count == 0) {
-          INSERT_USER_BY_SOCIAL_LOGIN(userInfo,'google'); //로그인 이력이 있는 구글ID가 아니라면 새로 Insert
+          console.log("카카오 아이디 중복 없음 => INSERT USER")
+          INSERT_USER_BY_SOCIAL_LOGIN(userInfo, type); //로그인 이력이 있는 구글ID가 아니라면 새로 Insert
         }
       },
       error => {
@@ -86,43 +88,7 @@ export const GOOGLE_LOGIN = userInfo => {
       },
     );
   });
-};
-
-
-//Kakao Login 처리. 기존 접속이력이 있는 id의경우 insert구문은 실행안됨.
-export const KAKAO_LOGIN = async (userInfo) => {
-  //userInfo에는 카카오 로그인 userInfo가 담겨져있다.
-  //이 앱에서는 카카오 로그인을 통해 nickname, id, profileImageurl, email을 선택적 동의로 얻는다
-  console.log("KAKAO " + userInfo.id)
-  console.log("KAKAO " + userInfo.email)
-  console.log("KAKAO " + userInfo.nickname)
-  console.log("KAKAO " + userInfo.profileImageUrl)
-  await DB.transaction(tx => {
-    tx.executeSql(
-      'SELECT COUNT(*) AS count FROM user_info WHERE id=?',
-      [userInfo.id],
-      (tx, res) => {
-        let count = res.rows.item(0).count;
-        console.log('Debug2');
-
-        if (count > 0) {
-          console.log('Dup Exists');
-          console.log(count)
-        } else if (count == 0) {
-          console.log('중복없음 => insertUser');
-          INSERT_USER_BY_SOCIAL_LOGIN(userInfo,'kakao'); //로그인 이력이 있는 구글ID가 아니라면 새로 Insert
-
-        }
-      },
-      error => {
-        console.log(
-          'Select Count of Google Logined Duplicated User' +
-            JSON.stringify(error),
-        );
-      },
-    );
-  });
-};
+}
 
 export const INSERT_USER_BY_SOCIAL_LOGIN = async (userInfo, type) => {
   const user_data = {
@@ -187,10 +153,7 @@ export const UPDATE_USER_INFO = info => {
 
 export const LOGIN_VALIDATION = async (id, pwd) => {
   console.log('LOGIN VALIDATION' + id + '  / ' + pwd);
-  let count_of_matched_user = {
-    count: 0,
-    irrelevant: true,
-  };
+  let count_of_matched_user = 0
   try{
     await DB.transaction(tx => {
       tx.executeSql(
@@ -199,7 +162,7 @@ export const LOGIN_VALIDATION = async (id, pwd) => {
         (tx, res) => {
           let count = res.rows.item(0).count;
           console.log('ID PWD Matched user count :  ' + count);
-          count_of_matched_user.count = count;
+          count_of_matched_user = count;
         },
         error => {
           console.log(
@@ -269,7 +232,6 @@ export const SELECT_USER_INFO_BY_USERNO = user_no => {
 
 
 export const SELECT_USER_INFO_BY_ID = async id => {
-  console.log("SELECT USER INFO BY ID / ID: "+id)
   const user_data = {
     id: '',
     pwd: '',

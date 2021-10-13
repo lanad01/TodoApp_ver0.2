@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Component } from 'react';
-import {  View, Text, StyleSheet, TouchableOpacity,} from 'react-native';
+import React from 'react';
+import {  View, StyleSheet, TouchableOpacity,} from 'react-native';
 import Modal from 'react-native-modal';
 import { ActivityIndicator } from 'react-native-paper';
 

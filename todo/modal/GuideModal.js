@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-shadow-cards';
-import { styles } from '../screen/styles/taskListStyle';
 import Animated, {  useAnimatedStyle,  useSharedValue,  withTiming,withRepeat } from 'react-native-reanimated';
+
+import { styles } from '../screen/tab/task/style/taskListStyle';
 
 export const GuideModal = props => {
   const offset = useSharedValue(0);

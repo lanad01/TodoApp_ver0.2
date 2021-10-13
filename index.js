@@ -3,7 +3,7 @@
  */
 
 import {AppRegistry} from 'react-native';
-import App from './todo/route';
+import App from './todo/navigation/route';
 import {name as appName} from './app.json';
 import PushNotification from 'react-native-push-notification';
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
