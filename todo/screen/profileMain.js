@@ -6,24 +6,22 @@ import {
   TouchableOpacity,
   BackHandler,
   Alert,
-  Platform,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 
 import { AuthContext } from '../context/authcontext';
 import { styles } from './styles/profileScreenStyle';
 import { HEIGHT } from '../dp';
-import { DB, DB_MODULE } from '../sqliteConnection';
 
 export const ProfileMain = ({ navigation }) => {
   const authContext = React.useContext(AuthContext);
   const config = { velocityThreshold: 0.5, directionalOffsetThreshold: 50 }; //swipe gesture Handler Option
-
+  // 화면 Swipe 결과 실행
   function onSwipe(gestureName) {
-    // 화면 Swipe 결과 실행
     console.log('GestureName :' + gestureName);
     if (gestureName === 'SWIPE_LEFT') navigation.navigate('TaskScreen'); //Swipe Left할 시 Screen.Task로 이동
   }
+
   //Profile Screen에서 HardwareBackBtn을 눌렀을 시 발생하는 컨펌 Alert
   const onBackPress = useCallback(() => {
     Alert.alert('Exit the app', 'Do you want to exit the app?', [
@@ -44,7 +42,7 @@ export const ProfileMain = ({ navigation }) => {
     //TaskList, Profile Screen 화면에서는 HardWareBackButton을 누를 시 Alert창을 출력
     //하지만 Edit로 depth가 깊어지면서는 스택을 바탕으로한 뒤로가기버튼이 수행되도록 BackHEvent를 삭제
     BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    console.log('삭제?');
+    console.log('BackHandler 삭제');
     navigation.push('ProfileEdit');
   };
   useEffect(() => {
@@ -52,28 +50,11 @@ export const ProfileMain = ({ navigation }) => {
     console.log('Profile Screen Mount'); // 첨에만 발동
     const subscribe = navigation.addListener('focus', () => {
       //foucs될 때마다 발동 , 이게 핵심
-      console.log('백이벤트생성');
       BackHandler.addEventListener('hardwareBackPress', onBackPress);
     });
     return subscribe;
   }, []);
 
-  //DB Modulization
-  const dbModule = () => {
-    let myFirstPromise = new Promise((resolve, reject) => {
-      const result = DB_MODULE(authContext.user_no);
-      setTimeout(() => {
-      resolve(result);
-      }, 250);
-    }).catch(err => {
-      console.log("Error occur in promise"+err)
-    });
-
-    myFirstPromise.then(result => {
-      console.log('result check  : ' + result.id);
-      console.log('result check  : ' + result.pwd);
-    });
-  };
 
   return (
     <GestureRecognizer
@@ -101,9 +82,6 @@ export const ProfileMain = ({ navigation }) => {
             </Text>
             <TouchableOpacity onPress={goToEdit} style={styles.editBox}>
               <Text style={styles.editText}> 프로필 수정 </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={dbModule} style={styles.editBox}>
-              <Text style={styles.editText}> DB코딩 모듈화 가능성 </Text>
             </TouchableOpacity>
           </View>
         </View>

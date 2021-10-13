@@ -5,11 +5,8 @@ import {
   Image,
   TextInput,
   KeyboardAvoidingView,
-  Platform,
   Alert,
   TouchableOpacity,
-  Keyboard,
-  BackHandler,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
@@ -17,22 +14,22 @@ import Modal from 'react-native-modal';
 import { AuthContext } from '../context/authcontext';
 import { PwdChangeModal } from '../modal/PwdChangeModal';
 import { ErrorModal } from '../modal/ErrorModal';
-import { DB, UPDATE_USER_INFO } from '../sqliteConnection';
+import { UPDATE_USER_INFO } from '../sqliteConnection';
 import { styles } from './styles/profileEditStyle';
 
 const ProfileEdit = ({ navigation }) => {
   const authContext = React.useContext(AuthContext);
   const [pictureSelected, setPicture] = useState(false); //지정된 프로필이미지의 존재여부
-  // 프로필 이미지 image.path From Crop Picker
-  const [profileImage, setProfileImage] = useState(authContext.image);
+  const [profileImage, setProfileImage] = useState(authContext.image); // DB에 등록된 프로필 이미지 path
   const [newName, setNewName] = useState(null); // not null
   const [newEmail, setNewEmail] = useState(null); // 바꿀 email
-  const [newJob, setNewJob] = useState(null);
+  const [newJob, setNewJob] = useState(null); // 바꿀 job
 
-  const [errorModal, setErrorModal] = useState(false); //이름 불일치
-  const [modalShow, setModal] = useState(false);
-  const [pwdChangeModal, setPwdChangeModal] = useState(false);
+  const [errorModal, setErrorModal] = useState(false); //이름 불일치 에러 메시지 모달
+  const [profileModal, setProfileModal] = useState(false); //이미지 설정 모달
+  const [pwdChangeModal, setPwdChangeModal] = useState(false); //비밀번호 변경 모달
 
+  //DB에서 받아온 image가 null일 경우의 대체 이미지 설정
   if (authContext.image == null) {
     console.log('auth image Null');
     authContext.image =
@@ -49,15 +46,14 @@ const ProfileEdit = ({ navigation }) => {
       .then(image => {
         setPicture(true);
         setProfileImage(image.path);
-        setModal(!modalShow);
+        setProfileModal(!profileModal);
       })
       .catch(e => {
+        console.log("Profile Edit / pick one Photo Failed : " + JSON.stringify(e))
         //Null Handle
         if (e.code !== 'E_PICKER_CANCELLED') {
           console.log(e);
-          Alert.alert(
-            'Sorry, there was an issue attempting to get the image/video you selected. Please try again',
-          );
+          Alert.alert('Issue occured to get the image you selected. Please try again');
         }
       });
   }
@@ -66,20 +62,20 @@ const ProfileEdit = ({ navigation }) => {
       .then(image => {
         setPicture(true);
         setProfileImage(image.path);
-        setModal(!modalShow);
+        setProfileModal(!profileModal);
       })
       .catch(e => {
+        console.log("Profile Edit / call camera Failed : " + JSON.stringify(e))
         // 사진찍기 값이 널일 경우
         if (e.code !== 'E_PICKER_CANCELLED') {
           console.log(e);
-          Alert.alert(
-            'Sorry, there was an issue attempting to get the image/video you selected. Please try again',
-          );
+          Alert.alert('Issue occured to get the image you selected. Please try again')
         }
       });
   }
+
+  // 프로필 수정 완료 버튼 Press
   const saveConfirm = () => {
-    // 프로필 수정 완료 버튼 Press
     if (newName === null) {
       // 이름 Null 분기
       console.log('Errormodal');
@@ -88,12 +84,9 @@ const ProfileEdit = ({ navigation }) => {
       saveBtn();
     }
   };
+
+  // 프로필 수정 최종 분기
   function saveBtn() {
-    // 프로필 수정 최종 분기
-    console.log('********************************************');
-    console.log('ProfileImage :' + profileImage);
-    console.log('AuthImage :' + authContext.image);
-    console.log('********************************************');
     if (profileImage === undefined) {
       // 건드리지 않았을 때
       console.log('건드리지 않았을 때');
@@ -111,7 +104,7 @@ const ProfileEdit = ({ navigation }) => {
       newImage: authContext.image,
       user_no: authContext.user_no,
     };
-    UPDATE_USER_INFO(updated_userInfo);
+    UPDATE_USER_INFO(updated_userInfo); //user 정보 update SQLite 접속
     authContext.name = newName;
     authContext.email = newEmail;
     authContext.job = newJob;
@@ -140,7 +133,7 @@ const ProfileEdit = ({ navigation }) => {
           style={styles.profile}
         />
         <TouchableOpacity
-          onPress={() => setModal(!modalShow)}
+          onPress={() => setProfileModal(!profileModal)}
           style={styles.cameraImg}>
           <Image source={require('../assets/cameraEidt.png')} style={{}} />
         </TouchableOpacity>
@@ -194,7 +187,7 @@ const ProfileEdit = ({ navigation }) => {
         </View>
       </View>
       <Modal
-        isVisible={modalShow}
+        isVisible={profileModal}
         avoidKeyboard={true}
         transparent={true}
         style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -208,7 +201,7 @@ const ProfileEdit = ({ navigation }) => {
             <Text style={styles.photochoose}>사진 촬영</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setModal(!modalShow)}
+            onPress={() => setProfileModal(!profileModal)}
             style={styles.choicebox}>
             <Text textAlign="center" style={styles.photochoose}>
               나 가 기

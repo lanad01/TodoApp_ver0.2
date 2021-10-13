@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, Alert, Text, TouchableOpacity } from 'react-native';
+import { Image, Alert, Text, TouchableOpacity, BackHandler } from 'react-native';
 import { logout, unlink } from '@react-native-seoul/kakao-login';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -53,7 +53,6 @@ export const MainScreen = props => {
     //task의 숫자가 null이 아니면 자동로그인일 경우 알람 설정
     if (number_of_task != null && authContext.autologin == true) {
       AUTO_LOGIN_PUSH_ALARM(authContext, number_of_task);
-      console.log('mainscreen / 자동로그인 체크 ' + authContext.autologin);
     }
     return () => {};
   }, [number_of_task]);
@@ -103,7 +102,6 @@ export const MainScreen = props => {
       const message = await unlink();
       console.log('링크해제 카카오 메시지' + message);
     }
-
     AsyncStorage.removeItem('user_no');
     props.navigation.replace('Auth'); // 로그인화면
   };

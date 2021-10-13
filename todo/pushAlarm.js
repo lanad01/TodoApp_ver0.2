@@ -30,6 +30,7 @@ export const BACKGROUND_ALARM_ABOUT_TO_EXPIRED_DATE = number_of_task_about_exp =
       repeatType: 'hour', //1분마다 알람이 간다
       allowWhileIdle: true,
       showWhen: true, //시간 표시 true
+      timeoutAfter:600 * 1000, // 푸쉬 time out 600초
       color: 'red',
       when: Math.floor(new Date().getTime()),
       largeIcon: 'splash_icon', // (optional) default: "ic_launcher". Use "" for no large icon.

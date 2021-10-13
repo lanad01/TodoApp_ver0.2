@@ -3,7 +3,7 @@ import {  Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, 
 } from 'react-native';
 import { AuthContext } from '../context/authcontext';
 import { ErrorModal } from '../modal/ErrorModal';
-import { DB } from '../sqliteConnection';
+import { RESET_PWD } from '../sqliteConnection';
 import { styles } from './styles/resetPwdStyle';
 
 export const ProfileResetPwd = ({ navigation }) => {
@@ -18,19 +18,8 @@ export const ProfileResetPwd = ({ navigation }) => {
   const confirm = () => {
     if (newPwd === pwdCheck && newPwd != authContext.pwd) {
       console.log('new pwd matched');
-      DB.transaction(tx => {
-        tx.executeSql(
-          'UPDATE user_info SET pwd=? WHERE user_no=? ',
-          [newPwd, authContext.user_no],
-          (tx, res) => {
-            console.log('update success');
-            navigation.navigate('Profile1st');
-          },
-          error => {
-            console.log('Update Failed' + error);
-          },
-        );
-      });
+      RESET_PWD(authContext.user_no, newPwd) // 비밀번호 재설정 Sqlite 구문
+      navigation.replace('ProfileMain');
     } else if (newPwd != pwdCheck) {
       console.log('double check unmatched');
       setErrorMsg('새로운 비밀번호와 비밀번호 확인이 불일치합니다');

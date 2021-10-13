@@ -1,7 +1,11 @@
 import { StyleSheet } from 'react-native';
 import { DPW } from '../../dp';
 export const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    backgroundColor: '#191970',
+    alignItems: 'center',
+  },
   headerText: {
     paddingTop: 30 * DPW,
     alignItems: 'center',
@@ -38,9 +42,10 @@ export const styles = StyleSheet.create({
     height: 120 * DPW,
     borderRadius: 10,
     paddingLeft: 30 * DPW,
-    backgroundColor: '#E6E6FA',
+    backgroundColor: 'white',
     borderWidth: 3,
     color: '#191970',
+    fontWeight:'bold',
     fontSize: 38 * DPW ,
   },
   showText: {

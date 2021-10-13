@@ -14,6 +14,8 @@ export const DB = SQLite.openDatabase(
     console.log(err);
   },
 );
+
+
 export const CREATE_TASK_TABLE = () =>
   DB.transaction(tx => {
     tx.executeSql(
@@ -58,22 +60,22 @@ export const CREATE_USER_TABLE = () =>
       },
     );
   });
+
 //GOOGLE LOGIN 처리. 기존 접속이력이 있는 id의경우 insert구문은 실행안됨.
-export const GOOGLE_LOGIN = userInfo => {
-  let name = userInfo.user.name;
-  let email = userInfo.user.email;
-  let id = userInfo.user.id;
+export const GOOGLE_LOGIN = userInfo => { 
+  //구글 로그인 userInfo의 경우 name, email, id가 담겨져있다. 프로필은 없다.
+  
   DB.transaction(tx => {
     tx.executeSql(
-      'SELECT COUNT(*) AS count FROM user_info WHERE email=?',
-      [email],
+      'SELECT COUNT(*) AS count FROM user_info WHERE id=?',
+      [userInfo.user.id],
       (tx, res) => {
         let count = res.rows.item(0).count;
         console.log('구글아이디 중복 몇개?' + count);
         if (count > 0) {
           console.log('Dup Exists');
         } else if (count == 0) {
-          insertUserFromGoogle(name, email, id); //로그인 이력이 있는 구글ID가 아니라면 새로 Insert
+          INSERT_USER_BY_SOCIAL_LOGIN(userInfo,'google'); //로그인 이력이 있는 구글ID가 아니라면 새로 Insert
         }
       },
       error => {
@@ -84,55 +86,32 @@ export const GOOGLE_LOGIN = userInfo => {
       },
     );
   });
-
-  const insertUserFromGoogle = (name, email, id) => {
-    const current_time = moment().format('llll'); //현재 시간을 'llll'로 포맷하여 Stringify
-    let tempPwdForGoogleLogin = '';
-    const possible =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    Array.from(Array(15)).forEach(() => {
-      tempPwdForGoogleLogin += possible.charAt(
-        Math.floor(Math.random() * possible.length),
-      );
-    });
-    DB.transaction(tx => {
-      tx.executeSql(
-        'INSERT INTO user_info (id, pwd, job, name, email, image, regi_date) VALUES (?,?,?,?,?,?,?)',
-        [id, tempPwdForGoogleLogin, null, name, email, null, current_time],
-        (tx, res) => {
-          console.log('Google Login Insert Success ');
-        },
-        error => {
-          console.log(
-            'Insert google Login user Failed' + JSON.stringify(error),
-          );
-        },
-      );
-    });
-  };
 };
-//Kakao Login 처리. 기존 접속이력이 있는 id의경우 insert구문은 실행안됨.
-export const KAKAO_LOGIN = async userInfo => {
-  let id = userInfo.id;
-  let name = userInfo.nickname;
-  let email = userInfo.email;
-  let image = userInfo.profileImageUrl;
-  console.log('Kakao id 스클릿 커넥션' + id);
 
+
+//Kakao Login 처리. 기존 접속이력이 있는 id의경우 insert구문은 실행안됨.
+export const KAKAO_LOGIN = async (userInfo) => {
+  //userInfo에는 카카오 로그인 userInfo가 담겨져있다.
+  //이 앱에서는 카카오 로그인을 통해 nickname, id, profileImageurl, email을 선택적 동의로 얻는다
+  console.log("KAKAO " + userInfo.id)
+  console.log("KAKAO " + userInfo.email)
+  console.log("KAKAO " + userInfo.nickname)
+  console.log("KAKAO " + userInfo.profileImageUrl)
   await DB.transaction(tx => {
-    console.log('Debug1');
     tx.executeSql(
       'SELECT COUNT(*) AS count FROM user_info WHERE id=?',
-      [id],
+      [userInfo.id],
       (tx, res) => {
         let count = res.rows.item(0).count;
         console.log('Debug2');
 
         if (count > 0) {
           console.log('Dup Exists');
+          console.log(count)
         } else if (count == 0) {
           console.log('중복없음 => insertUser');
-          insertUserFromKakao(name, id); //로그인 이력이 있는 구글ID가 아니라면 새로 Insert
+          INSERT_USER_BY_SOCIAL_LOGIN(userInfo,'kakao'); //로그인 이력이 있는 구글ID가 아니라면 새로 Insert
+
         }
       },
       error => {
@@ -143,72 +122,60 @@ export const KAKAO_LOGIN = async userInfo => {
       },
     );
   });
-
-  const insertUserFromKakao = async (name, id) => {
-    const current_time = moment().format('llll'); //현재 시간을 'llll'로 포맷하여 Stringify
-    let tempPwdForKakaoLogin = ''; //카카오에서 얻어온 id와 더불어 더미 pwd 변수 선언
-    const possible =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    Array.from(Array(15)).forEach(() => {
-      // 랜덤형 pwd 생성
-      tempPwdForKakaoLogin += possible.charAt(
-        Math.floor(Math.random() * possible.length),
-      );
-    });
-    await DB.transaction(tx => {
-      tx.executeSql(
-        'INSERT INTO user_info (id, pwd, job, name, email, image, regi_date) VALUES (?,?,?,?,?,?,?)',
-        [id, tempPwdForKakaoLogin, null, name, email, image, current_time],
-        (tx, res) => {
-          console.log('kakao Login Insert Success ');
-        },
-        error => {
-          console.log(
-            'Insert google Login user Failed' + JSON.stringify(error),
-          );
-        },
-      );
-    });
-  };
 };
-export const INSERT_USER_INFO = id => {
+
+export const INSERT_USER_BY_SOCIAL_LOGIN = async (userInfo, type) => {
   const user_data = {
-    id : '',
-    pwd : '',
-    job : '',
-    name : '',
-    email : '',
-    image : '',
-    regi_date : null,
-    job : '',
-    user_no : 0
+    id: '',
+    name: '',
+    email: '',
+    image: null,
+  };
+  if(type=='google'){
+    user_data.id = userInfo.user.id
+    user_data.email = userInfo.user.email
+    user_data.name = userInfo.user.name
+    console.log("GOOGLE INSERT USER INFO CHECK  " + user_data.id) 
+    console.log("GOOGLE INSERT USER INFO CHECK  " + user_data.email) 
+    console.log("GOOGLE INSERT USER INFO CHECK  " + user_data.name) 
+    user_data.image = null
+  }else if(type=='kakao'){
+    user_data.id=userInfo.id
+    user_data.name=userInfo.nickname
+    user_data.email=userInfo.email
+    user_data.image=userInfo.profileImageUrl
+    console.log("KAKAO INSERT USER INFO CHECK : "+user_data.id)
+    console.log("KAKAO INSERT USER INFO CHECK : "+user_data.name)
+    console.log("KAKAO INSERT USER INFO CHECK : "+user_data.email)
+    console.log("KAKAO INSERT USER INFO CHECK : "+user_data.image)
   }
-  DB.transaction(tx => {
+  
+  console.log('Login type  : ' + type);
+  const current_time = moment().format('LL'); //현재 시간을 'llll'로 포맷하여 Stringify
+  let tempPwd = ''; //카카오에서 얻어온 id와 더불어 더미 pwd 변수 선언
+  const possible =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  Array.from(Array(15)).forEach(() => {
+    // 랜덤형 pwd 생성
+    tempPwd += possible.charAt(
+      Math.floor(Math.random() * possible.length),
+    );
+  });
+  await DB.transaction(tx => {
     tx.executeSql(
-      'SELECT id, pwd, job, name, email, image, regi_date, job, user_no FROM user_info WHERE id=?',
-      [id],
+      'INSERT INTO user_info (id, pwd, job, name, email, image, regi_date) VALUES (?,?,?,?,?,?,?)',
+      [user_data.id, tempPwd, null, user_data.name, user_data.email, user_data.image, current_time],
       (tx, res) => {
-        console.log('select success');
-        let user = res.rows.item(0).user_no;
-        console.log('user_no : ' + user); 
-        let selected = res.rows;
-        user_data.user_no = user;
-        user_data.id = selected.item(0).id;
-        user_data.pwd = selected.item(0).pwd;
-        user_data.name = selected.item(0).name;
-        user_data.email = selected.item(0).email;
-        user_data.job = selected.item(0).job;
-        user_data.regi_date = selected.item(0).regi_date;
-        user_data.image = selected.item(0).image;
-        console.log('image');
+        console.log('SOCIAL Login Insert Success ');
       },
       error => {
-        console.log('Select Failed' + error);
+        console.log('Insert google Login user Failed' + JSON.stringify(error));
       },
     );
   });
-  return user_data
-}
+};
+
+
 export const UPDATE_USER_INFO = info => {
   DB.transaction(tx => {
     tx.executeSql(
@@ -223,6 +190,127 @@ export const UPDATE_USER_INFO = info => {
       },
     );
   });
+};
+
+export const LOGIN_VALIDATION = async (id, pwd) => {
+  console.log('LOGIN VALIDATION' + id + '  / ' + pwd);
+  let count_of_matched_user = {
+    count: 0,
+    irrelevant: true,
+  };
+  try{
+    await DB.transaction(tx => {
+      tx.executeSql(
+        'SELECT count(*) as count FROM user_info WHERE id=? AND pwd=? ', //select  반드시 count
+        [id, pwd],
+        (tx, res) => {
+          let count = res.rows.item(0).count;
+          console.log('ID PWD Matched user count :  ' + count);
+          count_of_matched_user.count = count;
+        },
+        error => {
+          console.log(
+            'AuthScreen / 일반 로그인 Failed : ' + JSON.stringify(error),
+          );
+        },
+      );
+    });
+  }catch(err){
+    console.log("LOGIN VALIDATION ERROR " +JSON.stringify(err))
+  }
+  
+  return count_of_matched_user;
+};
+
+//비밀번호 재설정
+export const RESET_PWD = (user_no, newPwd) => {
+  console.log('SQLite ' + user_no + '     ' + newPwd);
+  DB.transaction(tx => {
+    tx.executeSql(
+      'UPDATE user_info SET pwd=? WHERE user_no=? ',
+      [newPwd, user_no],
+      (tx, res) => {
+        console.log('update success');
+      },
+      error => {
+        console.log('Update Failed' + error);
+      },
+    );
+  });
+};
+
+export const SELECT_USER_INFO_BY_USERNO = user_no => {
+  const user_data = {
+    id: '',
+    pwd: '',
+    job: '',
+    name: '',
+    email: '',
+    image: null,
+    regi_date: null,
+    job: ''
+  };
+  DB.transaction(tx => {
+    tx.executeSql(
+      'SELECT id, pwd, job, name, email, image, regi_date, job, user_no FROM user_info WHERE user_no=?',
+      [user_no],
+      (tx, res) => {
+        let user = res.rows.item(0).user_no;
+        console.log('user_no : ' + user);
+        let selected = res.rows;
+        user_data.user_no = user;
+        user_data.id = selected.item(0).id;
+        user_data.pwd = selected.item(0).pwd;
+        user_data.name = selected.item(0).name;
+        user_data.email = selected.item(0).email;
+        user_data.job = selected.item(0).job;
+        user_data.regi_date = selected.item(0).regi_date;
+        user_data.image = selected.item(0).image;
+      },
+      error => {
+        console.log('Select Failed' + error);
+      },
+    );
+  });
+  return user_data;
+};
+
+
+export const SELECT_USER_INFO_BY_ID = id => {
+  console.log("SELECT USER INFO BY ID ID: "+id)
+  const user_data = {
+    id: '',
+    pwd: '',
+    job: '',
+    name: '',
+    email: '',
+    image: null,
+    regi_date: null,
+    job: '',
+    user_no: null,
+  };
+  DB.transaction(tx => {
+    tx.executeSql(
+      'SELECT id, pwd, job, name, email, image, regi_date, job, user_no FROM user_info WHERE id=?',
+      [id],
+      (tx, res) => {
+        let user = res.rows.item(0).user_no;
+        let selected = res.rows;
+        user_data.user_no = user;
+        user_data.id = selected.item(0).id;
+        user_data.pwd = selected.item(0).pwd;
+        user_data.name = selected.item(0).name;
+        user_data.email = selected.item(0).email;
+        user_data.job = selected.item(0).job;
+        user_data.regi_date = selected.item(0).regi_date;
+        user_data.image = selected.item(0).image;
+      },
+      error => {
+        console.log('Select Failed' + error);
+      },
+    );
+  });
+  return user_data;
 };
 
 export const GET_DATE = (authNo, taskname) => {
@@ -252,7 +340,6 @@ export const CHECK_EXP_OF_TASKS = user_no => {
       'SELECT exp_date FROM task_info2 WHERE user_no=?',
       [user_no],
       (tx, res) => {
-        console.log('SELECT CHECK EXP TASKS SUCCESS');
         let length = res.rows.length; //해당 유저의 task 개수
         console.log('Length of check exp : ' + length);
         for (let i = 0; i < length; i++) {
@@ -331,4 +418,24 @@ export const DB_MODULE = async user_no => {
     );
   });
   return user;
+};
+
+
+export const DELETE_TEMP = () => {
+  DB.transaction(tx => {
+    console.log('Debug1');
+    tx.executeSql(
+      'DELETE FROM user_info',
+      [],
+      (tx, res) => {
+        console.log('Delete success');
+      },
+      error => {
+        console.log(
+          'Select Count of Google Logined Duplicated User' +
+            JSON.stringify(error),
+        );
+      },
+    );
+  });
 };

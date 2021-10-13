@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { DPW } from '../dp';
 import { styles } from './styles/assignScreenPhotoStyle';
 import { AuthContext } from '../context/authcontext';
-import { DB, INSERT_USER_INFO } from '../sqliteConnection';
+import { DB, GET_INSERTED_USER_INFO, SELECT_USER_INFO_BY_ID } from '../sqliteConnection';
 
 export default AssignScreen_2nd = ({ route, navigation }) => {
   console.log('Assign 2nd');
@@ -36,8 +36,6 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
     Keyboard.addListener('keyboardDidHide', e => {
       setRise(0);
     });
-    // console.log('KeyboardHide unSubscribe');
-    // Keyboard.removeAllListeners('keyboardDidHide');
     return () => {};
   }, []);
 
@@ -47,7 +45,7 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
   };
 
   // 갤러리에서 사진선택
-  function pickOnePhoto() {
+  function pickOnePhoto(){
     ImagePicker.openPicker({ cropPicker_Opt })
       .then(image => {
         setPicture(true); // 사진선택 True
@@ -57,11 +55,9 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
       })
       .catch(e => {
         //Null Handle
-        if (e.code !== 'E_PICKER_CANCELLED') {
+        if(e.code !== 'E_PICKER_CANCELLED'){
           console.log(e);
-          Alert.alert(
-            'Sorry, there was an issue attempting to get the image/video you selected. Please try again',
-          );
+          Alert.alert('Issue attempting to get the image/video you selected');
         }
       });
   }
@@ -77,9 +73,7 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
         //Null Handle
         if (e.code !== 'E_PICKER_CANCELLED') {
           console.log(e);
-          Alert.alert(
-            'Sorry, there was an issue attempting to get the image/video you selected. Please try again',
-          );
+          Alert.alert('Issue attempting to get the image/video you selected');
         }
       });
   }
@@ -90,6 +84,7 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
       nameRef.current.focus(); // NameInput란에 커서 처리
       setNameIsNN(true); // 이름 null error Modal On
     } else {
+      // 
       DB.transaction(tx => {
         const current_time = moment().format('LL'); //현재 시간을 'llll'로 포맷하여 Stringify
         console.log(current_time);
@@ -109,7 +104,7 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
   //Insert 후 유저정보를 authContext에 저장
   const select = () => {
     let myFirstPromise = new Promise((resolve, reject) => {
-      const result = INSERT_USER_INFO(id);
+      const result = SELECT_USER_INFO_BY_ID(id);
       setTimeout(() => {
         resolve(result);
       }, 2000);

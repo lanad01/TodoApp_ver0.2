@@ -1,7 +1,7 @@
 import React from "react";
 
 export const AuthContext = React.createContext({
-    login_route : '',
+    login_route : '일반 로그인',
     autologin: false,
     user_no:'',
     id: '',
