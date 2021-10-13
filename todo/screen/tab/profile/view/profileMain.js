@@ -23,6 +23,7 @@ export const ProfileMain = ({ navigation }) => {
 
   //Profile Screen에서 HardwareBackBtn을 눌렀을 시 발생하는 컨펌 Alert
   const onBackPress = useCallback(() => {
+    console.log("Onback PRess useCallback")
     Alert.alert('Exit the app', 'Do you want to exit the app?', [
       {
         text: 'Cancel',
@@ -34,7 +35,7 @@ export const ProfileMain = ({ navigation }) => {
         onPress: () => BackHandler.exitApp(),
       },
     ]);
-    return true;
+    return true; //이게 없으면 바로 꺼버림 
   }, []);
 
   const goToEdit = () => {

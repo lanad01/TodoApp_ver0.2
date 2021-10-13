@@ -48,6 +48,9 @@ export const TabRoot = props => {
     return () => {};
   }, [number_of_task]);
 
+  const logoutImple = () => {
+    props.navigation.replace('Auth')
+  }
   //Profile screen Configure
   const profileScreen_Opt = () => {
     return {
@@ -62,6 +65,7 @@ export const TabRoot = props => {
             modalOn={logoutModal}
             modalOff={() => setLogoutModal(false)}
             message="로그아웃 하시겠습니까?"
+            gobackHome={logoutImple}
           />
         </TouchableOpacity>
       ),
@@ -91,6 +95,8 @@ export const TabRoot = props => {
             modalOn={logoutModal}
             modalOff={() => setLogoutModal(false)}
             message="로그아웃 하시겠습니까?"
+            gobakHome={logoutImple}
+
           />
         </TouchableOpacity>
         

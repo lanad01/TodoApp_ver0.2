@@ -44,7 +44,7 @@ const LogOutModal = (props) => {
       console.log('링크해제 카카오 메시지' + message);
     }
     AsyncStorage.removeItem('user_no');
-    navigation.navigate('Auth')
+    props.gobackHome()
 
   };
   return (

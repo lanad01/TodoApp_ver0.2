@@ -1,10 +1,9 @@
 - 디렉토리 정리
-- DB 모듈화 BY PROMIST 진행 필요
 - DB 모듈화 진행
 - BackHandler 처리
 
 
-- Did List / 1009
+- Did List 
  : Splash
  : kakao Login
  : Action Button change to UNSAFE_willupdate
@@ -13,6 +12,5 @@
  : autologin 설정
  : back ground notification
  : Push alarm Modulization
- 
- -Did List / 1010 
-: DB Modulization
+ : Modal Modulization
+ : DB Modulization
