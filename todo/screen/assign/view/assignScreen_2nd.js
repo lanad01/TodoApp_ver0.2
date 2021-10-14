@@ -8,14 +8,14 @@ import {
   Keyboard,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import Modal from 'react-native-modal';
-import moment from 'moment';
+import Modal from 'react-native-modal'
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { DPW } from '../../../config/dp';
 import { styles } from '../style/assignScreenPhotoStyle';
 import { AuthContext } from '../../../context/authcontext';
-import { DB , SELECT_USER_INFO_BY_ID} from '../../../sqliteConnection';
+import { SELECT_USER_INFO_BY_ID, INSERT_USER} from '../../../userTableConnection';
+import { ProfileChooseModal } from '../../../modal/ProfileChooseModal';
 
 export default AssignScreen_2nd = ({ route, navigation }) => {
   console.log('Assign 2nd');
@@ -25,7 +25,7 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
   const { id, pwd, job, email } = route.params; // assignScreen에서 작성된 유저 정보
   const [pictureSelected, setPicture] = useState(false); // 프로필 사진이 지정되었는지 안되었는지 여부
   const [profileImage, setProfileImage] = useState(null); // 프로필 사진 image.path
-  const [modalShow, setModal] = useState(false); // 프로필 사진 지정 방법 모달
+  const [profileChooseModal, setProfileChooseModal] = useState(false); // 프로필 사진 지정 방법 모달
   const [name, setName] = useState(null); // 유저네임
   const [nameIsNull, setNameIsNN] = useState(false); // 유저네임 Null 메시지
 
@@ -35,82 +35,40 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
     Keyboard.addListener('keyboardDidHide', e => {
       setRise(0);
     });
-    return () => {};
+    Keyboard.addListener('keyboardDidShow', e => {
+      setRise(90)
+    })
+    return () => {
+      Keyboard.removeAllListeners('keyboardDidHide')
+      Keyboard.removeAllListeners('keyboardDidShow')
+    };
   }, []);
 
-  //image CropPicker Configure
-  const cropPicker_Opt = () => {
-    return { cropping: true, includeBase64: true };
-  };
-
-  // 갤러리에서 사진선택
-  function pickOnePhoto(){
-    ImagePicker.openPicker({ cropPicker_Opt })
-      .then(image => {
-        setPicture(true); // 사진선택 True
-        console.log('pictureSelectd : ' + pictureSelected);
-        setProfileImage(image.path); // Profile이미지를 갤러리에서 선택한 사진으로 변경
-        setModal(!modalShow); //카메라 모달 종료
-      })
-      .catch(e => {
-        //Null Handle
-        if(e.code !== 'E_PICKER_CANCELLED'){
-          console.log(e);
-          Alert.alert('Issue attempting to get the image/video you selected');
-        }
-      });
-  }
-  // 사진 직접 찍기 선택
-  function callCamera() {
-    ImagePicker.openCamera({ cropPicker_Opt })
-      .then(image => {
-        setPicture(true); // 사진선택 True
-        setProfileImage(image.path); // 찍은 camera image path를 프로필 이미지로 변경
-        setModal(!modalShow); // 카메라 모달 종료
-      })
-      .catch(e => {
-        //Null Handle
-        if (e.code !== 'E_PICKER_CANCELLED') {
-          console.log(e);
-          Alert.alert('Issue attempting to get the image/video you selected');
-        }
-      });
-  }
   // 최종 Insert
-  const finalize = () => {
-    if (name === null) {
-      // 이름이 Null값
+  const finalize = async () => {
+    if (name === null) { // 이름 Null?
       nameRef.current.focus(); // NameInput란에 커서 처리
-      setNameIsNN(true); // 이름 null error Modal On
+      setNameIsNN(true); // 이름 null error Modal On "이름을 채워주세요"
     } else {
-      // 
-      DB.transaction(tx => {
-        const current_time = moment().format('LL'); //현재 시간을 'llll'로 포맷하여 Stringify
-        console.log(current_time);
-        tx.executeSql(
-          'INSERT INTO user_info (id, pwd, job, name, email, image, regi_date) VALUES (?,?,?,?,?,?,?)',
-          [id, pwd, job, name, email, profileImage, current_time],
-          (tx, res) => {
-            select(); //Insert된 값을 authContext에 저장
-          },
-          error => {
-            console.log('Insert Failed' + error);
-          },
-        );
-      });
+      const user_info = { // INSERT SQL에 보낼 유저정보 인자
+        id: id,
+        pwd : pwd,
+        name : name,
+        email : email,
+        job: job,
+        image : profileImage,
+      } 
+      INSERT_USER(user_info)
+      select()
     }
   };
   //Insert 후 유저정보를 authContext에 저장
-  const select = () => {
-    let myFirstPromise = new Promise((resolve, reject) => {
-      const result = SELECT_USER_INFO_BY_ID(id);
-      setTimeout(() => {
-        resolve(result);
-      }, 2000);
-    }).catch(err => {
-      console.log('Error occur in promise' + err);
-    });
-    myFirstPromise.then(result => {
+  const select = async () => {
+      const result = await SELECT_USER_INFO_BY_ID(id);
+      console.log("result check assin2" +result.id)
+      console.log("result check assin2" +result.pwd)
+      console.log("result check assin2" +result.name)
+      console.log("result check assin2" +result.email)
       authContext.id = result.id;
       authContext.name = result.name;
       authContext.email = result.email;
@@ -123,9 +81,9 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
         console.log('유저 id 저장');
       });
       authContext.image = result.image;
-      Keyboard.removeAllListeners('keyboardDidhide');
+      Keyboard.removeAllListeners('keyboardDidHide');
+      Keyboard.removeAllListeners('keyboardDidShow');
       navigation.replace('TabRoot');
-    });
     
   };
   return (
@@ -134,7 +92,7 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
         <Text style={styles.headerText}>
           사진과 이름을 등록해주세요. {pictureSelected}
         </Text>
-        <TouchableOpacity onPress={() => setModal(!modalShow)}>
+        <TouchableOpacity onPress={() => setProfileChooseModal(!profileChooseModal)}>
           <Image
             source={
               pictureSelected
@@ -161,7 +119,6 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
           placeholder=" &nbsp;이름을 작성해주세요."
           onChangeText={name => setName(name)}
           ref={nameRef}
-          onFocus={() => setRise(90)}
         />
         <Text style={styles.nameInfo}> 이름은 반드시 적어주셔야해요! </Text>
         <Text style={styles.Info}>
@@ -171,25 +128,12 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
         <TouchableOpacity onPress={finalize} style={styles.footer}>
           <Text style={styles.btn}>등 록 하 기 </Text>
         </TouchableOpacity>
-        <Modal isVisible={modalShow} avoidKeyboard={true} transparent={true}>
-          <View>
-            <TouchableOpacity onPress={pickOnePhoto} style={styles.choicebox}>
-              <Text textAlign="center" style={styles.photochoose}>
-                갤러리에서 사진 선택!{' '}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={callCamera} style={styles.choicebox}>
-              <Text style={styles.photochoose}>사진 촬영</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setModal(!modalShow)}
-              style={styles.choicebox}>
-              <Text textAlign="center" style={styles.photochoose}>
-                나 가 기{' '}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
+        <ProfileChooseModal 
+          modalOn={profileChooseModal}
+          modalOff={ () => setProfileChooseModal(false)}
+          setPicture={ pictureValue => setPicture(pictureValue)}
+          setProfileImage= { profileImage => setProfileImage(profileImage)}
+        />
       </View>
     </View>
   );

@@ -35,7 +35,7 @@ export const ProfileMain = ({ navigation }) => {
         onPress: () => BackHandler.exitApp(),
       },
     ]);
-    return true; //이게 없으면 바로 꺼버림 
+    return true;
   }, []);
 
   const goToEdit = () => {

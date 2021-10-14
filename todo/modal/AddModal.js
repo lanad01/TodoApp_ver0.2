@@ -7,7 +7,7 @@ import DatePicker from 'react-native-date-picker';
 import { AuthContext } from '../context/authcontext';
 import { Loading } from '../modal/Loading';
 import { DB, GET_DATE } from '../sqliteConnection';
-import { styles } from '../screen/styles/addModalStyle';
+import { styles } from './styles/addModalStyle';
 
 export const AddModal = props => {
   const authContext = React.useContext(AuthContext);

@@ -11,7 +11,7 @@ import { Loading } from '../../../../modal/Loading';
 import { TodoContext } from '../../../../context/todoContext';
 import { AuthContext } from '../../../../context/authcontext';
 import { AddModal } from '../../../../modal/AddModal';
-import { DB } from '../../../../sqliteConnection';
+import { DB } from '../../../../userTableConnection';
 import { DPW } from '../../../../config/dp';
 import { styles } from '../style/taskListStyle';
 

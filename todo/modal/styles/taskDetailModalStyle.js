@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { DPW } from '../../config/dp';
-
 export const styles = StyleSheet.create({
   modal: {
     justifyContent: 'center',

@@ -8,8 +8,8 @@ import { AuthContext } from '../context/authcontext';
 import { TabRoot } from './tabRoot';
 import { AssignRoot } from './assignRoot';
 import { authScreen } from '../screen/auth/authScreen';
-
-import { CHECK_EXP_OF_TASKS, CREATE_USER_TABLE } from '../sqliteConnection';
+import { CHECK_EXP_OF_TASKS } from '../taskTableConnection';
+import { CREATE_USER_TABLE } from '../userTableConnection';
 import { Alert, AppState } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-community/async-storage';

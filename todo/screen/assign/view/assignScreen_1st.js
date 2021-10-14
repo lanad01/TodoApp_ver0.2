@@ -1,10 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {  View,  SafeAreaView,  Image,  Text,  TouchableWithoutFeedback,  TextInput,  Keyboard,
+import {
+  View,
+  SafeAreaView,
+  Image,
+  Text,
+  TouchableWithoutFeedback,
+  TextInput,
+  Keyboard,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { DPW } from '../../../config/dp';
-import { DB } from '../../../sqliteConnection';
+import { ID_DUPLICATION_CHECK } from '../../../userTableConnection';
 import { styles } from '../style/assignScreenStyle';
 import OneButtonModal from '../../../modal/OneButtonModal';
 
@@ -23,19 +30,20 @@ export default AssignScreen_1st = ({ navigation }) => {
 
   const [job, setJob] = useState(null);
   const [email, setEmail] = useState(null);
-  const [rise,setRise] = useState(0)
-  
+  const [rise, setRise] = useState(0);
+
   useEffect(() => {
     const hide = Keyboard.addListener('keyboardDidHide', e => {
       // 키보드가 사라지면 화면을 직접 내려버린다.
-      setRise(0)
+      setRise(0);
     });
-    return (() => {
-      console.log('Unsubscribe ');
-      // useEffect에서 요기 return뒤의 값은 해당 컴포넌트가 종료될 때 실행된다
-      // Keyboard.removeAllListeners('keyboardDidHide'); //resource Leak 에러메시지 해결
-      hide.remove();
-    },
+    return (
+      () => {
+        console.log('Unsubscribe ');
+        // useEffect에서 요기 return뒤의 값은 해당 컴포넌트가 종료될 때 실행된다
+        // Keyboard.removeAllListeners('keyboardDidHide'); //resource Leak 에러메시지 해결
+        hide.remove();
+      },
       []
     );
   });
@@ -43,7 +51,8 @@ export default AssignScreen_1st = ({ navigation }) => {
     setDupIdError(false);
     idRef.current.focus(); //중복오류 발생 시 id작성란에 focus
   };
-  function nextPage() {
+  async function nextPage() {
+    // >(next) 버튼 눌렀을 때.
     if (id === null && pwd != null) {
       //id Null
       setIdNull(true);
@@ -65,33 +74,21 @@ export default AssignScreen_1st = ({ navigation }) => {
       // Both Not null
       setIdNNMessage('');
       setPwdNNMsg('');
-      DB.transaction(tx => {
-        // Duplication Check
-        tx.executeSql(
-          'SELECT count(*) AS count from user_info WHERE id=?',
-          [id],
-          (tx, res) => {
-            let count = JSON.stringify(res.rows.item(0).count);
-            console.log(count);
-            if (count == 1) {
-              console.log('중복된 아이디 존재');
-              setDupIdError(true);
-            } else {
-              // 최종
-              console.log('중복아이디 없음');
-              navigation.push('Assign2nd', {
-                id: id,
-                pwd: pwd,
-                job: job,
-                email: email,
-              });
-            }
-          },
-          error => {
-            console.log('Valid Failed' + JSON.stringify(error));
-          },
-        );
-      });
+      //얻어와보자 count를
+      const count = await ID_DUPLICATION_CHECK(id); //ID와 일치하는 기존 아이디 개수 // 0이면 중복없음 => 가입 가능
+      console.log('Count check at Screen' + count);
+      if (count > 0) {
+        console.log('중복된 아이디 존재');
+        setDupIdError(true);
+      } else if (count == 0) {
+        console.log('중복아이디 없음');
+        navigation.push('Assign2nd', {
+          id: id,
+          pwd: pwd,
+          job: job,
+          email: email,
+        });
+      }
     }
   }
   return (
@@ -152,7 +149,7 @@ export default AssignScreen_1st = ({ navigation }) => {
             maxLength={30}
             placeholder=" Fell free to type here :)"
             onChangeText={job => setJob(job)}
-            onFocus={ () => setRise(160)}
+            onFocus={() => setRise(160)}
           />
 
           <Text style={styles.category}> Email </Text>
@@ -162,8 +159,7 @@ export default AssignScreen_1st = ({ navigation }) => {
             maxLength={30}
             placeholder=" email@example.com"
             onChangeText={email => setEmail(email)}
-            onFocus={ () => setRise(350)}
-
+            onFocus={() => setRise(350)}
           />
         </View>
       </TouchableWithoutFeedback>

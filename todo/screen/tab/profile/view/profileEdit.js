@@ -8,14 +8,13 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import Modal from 'react-native-modal';
 
 import { AuthContext } from '../../../../context/authcontext';
 import { PwdChangeModal } from '../../../../modal/PwdChangeModal';
-import { UPDATE_USER_INFO } from '../../../../sqliteConnection';
+import { UPDATE_USER_INFO } from '../../../../userTableConnection';
 import { styles } from '../style/profileEditStyle';
 import OneButtonModal from '../../../../modal/OneButtonModal';
+import { ProfileChooseModal } from '../../../../modal/ProfileChooseModal';
 
 const ProfileEdit = ({ navigation }) => {
   const authContext = React.useContext(AuthContext);
@@ -33,44 +32,6 @@ const ProfileEdit = ({ navigation }) => {
     console.log('auth image Null');
     authContext.image =
       'https://icon-library.com/images/profile-icon/profile-icon-7.jpg';
-  }
-
-  const cropPicker_Opt = () => {
-    return { cropping: true, includeBase64: true };
-  }; //Img crop picker Option
-
-  function pickOnePhoto() {
-    //갤러리에서 선택
-    ImagePicker.openPicker({ cropPicker_Opt })
-      .then(image => {
-        setPicture(true);
-        setProfileImage(image.path);
-        setProfileModal(!profileModal);
-      })
-      .catch(e => {
-        console.log("Profile Edit / pick one Photo Failed : " + JSON.stringify(e))
-        //Null Handle
-        if (e.code !== 'E_PICKER_CANCELLED') {
-          console.log(e);
-          Alert.alert('Issue occured to get the image you selected. Please try again');
-        }
-      });
-  }
-  function callCamera() {
-    ImagePicker.openCamera({ cropPicker_Opt })
-      .then(image => {
-        setPicture(true);
-        setProfileImage(image.path);
-        setProfileModal(!profileModal);
-      })
-      .catch(e => {
-        console.log("Profile Edit / call camera Failed : " + JSON.stringify(e))
-        // 사진찍기 값이 널일 경우
-        if (e.code !== 'E_PICKER_CANCELLED') {
-          console.log(e);
-          Alert.alert('Issue occured to get the image you selected. Please try again')
-        }
-      });
   }
 
   // 프로필 수정 완료 버튼 Press
@@ -185,29 +146,12 @@ const ProfileEdit = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <Modal
-        isVisible={profileModal}
-        avoidKeyboard={true}
-        transparent={true}
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View>
-          <TouchableOpacity onPress={pickOnePhoto} style={styles.choicebox}>
-            <Text textAlign="center" style={styles.photochoose}>
-              갤러리에서 사진 선택!
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={callCamera} style={styles.choicebox}>
-            <Text style={styles.photochoose}>사진 촬영</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setProfileModal(!profileModal)}
-            style={styles.choicebox}>
-            <Text textAlign="center" style={styles.photochoose}>
-              나 가 기
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+      <ProfileChooseModal 
+          modalOn={profileModal}
+          modalOff={ () => setProfileModal(false)}
+          setPicture={ pictureValue => setPicture(pictureValue)}
+          setProfileImage= { profileImage => setProfileImage(profileImage)}
+      />
       <OneButtonModal
         modalOn={errorModal}
         message="이름은 반드시 적어주셔야 합니다."

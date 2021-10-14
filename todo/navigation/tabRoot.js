@@ -2,12 +2,12 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {  Image,  Text,  TouchableOpacity,  BackHandler,   } from 'react-native';
 
-import { styles } from '../screen/styles/tabsScreenStyle';
+import { styles } from './styles/tabsScreenStyle';
 import { ProfileRoot } from './profileRoot';
 import { TodoContext } from '../context/todoContext';
 import { AuthContext } from '../context/authcontext';
 import { TaskScreen } from '../screen/tab/task/view/taskScreen';
-import { CREATE_TASK_TABLE, GET_BADGE_VALUE } from '../sqliteConnection';
+import { CREATE_TASK_TABLE, GET_BADGE_VALUE } from '../taskTableConnection';
 import { AUTO_LOGIN_PUSH_ALARM } from '../pushAlarm';
 import LogOutModal from '../modal/LogOutModal';
 
@@ -25,7 +25,7 @@ export const TabRoot = props => {
       const result = GET_BADGE_VALUE(authContext.user_no);
       setTimeout(() => {
         resolve(result);
-      }, 2000);
+      }, 1000);
     }).catch(err => {
       console.log('Error occur in promise' + err);
     });
