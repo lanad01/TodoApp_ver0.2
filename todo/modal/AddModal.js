@@ -6,7 +6,7 @@ import DatePicker from 'react-native-date-picker';
 
 import { AuthContext } from '../context/authcontext';
 import { Loading } from '../modal/Loading';
-import { DB, GET_DATE } from '../sqliteConnection';
+import { INSERT_TASK } from '../sqliteConnection/taskTableConnection';
 import { styles } from './styles/addModalStyle';
 
 export const AddModal = props => {
@@ -24,25 +24,18 @@ export const AddModal = props => {
   let dayName = week[exp.getDay()];
   let dateToKorean = // exp(Date Type) to String
     year + '년 ' + month + '월 ' + day + '일 ' + dayName + '요일 ';
-  const register = () => {
-    // Task 추가 등록
-    if (taskName != null) {
-      // name은 낫널
-      DB.transaction(tx => {
-        tx.executeSql(
-          'INSERT INTO task_info2 (user_no, task_name, priority, exp, exp_date, performed ) VALUES (?,?,?,?,?,false)',
-          [authContext.user_no, taskName, priority, dateToKorean, year+'-'+month+'-'+day ],
-          (tx, res) => {
-            console.log('Insert Success');
-            GET_DATE(authContext.user_no,taskName)
-            props.render(); // taskList Rerender
-            props.modalOff(); // AddModal 종료
-          },
-          error => {
-            console.log('Insert Failed' + JSON.stringify(error));
-          },
-        );
-      });
+  const register = () => { // Task 추가
+    if (taskName != null) { // Task name Not null
+      const taskInfo = {
+        user_no : authContext.user_no,
+        task_name : taskName,
+        priority : priority,
+        exp : dateToKorean,
+        exp_date :  year+'-'+month+'-'+day,
+      }
+      INSERT_TASK(taskInfo) // INSERT TASK SQLITE ACCESS
+      props.render(); // taskList Rerender
+      props.modalOff(); // AddModal 종료
     } else if (taskName === null) {
       console.log('TaskName Null!!');
     }

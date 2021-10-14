@@ -12,13 +12,13 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
 import { AuthContext } from '../context/authcontext';
-import { useNavigation } from '@react-navigation/core';
 
 const LogOutModal = (props) => {
   //two btn modal
   const authContext=React.useContext(AuthContext)
-  const navigation=useNavigation()
+
   const logOutImple = async () => {
+    console.log("로그인루트  "+authContext.login_route)
     if (
       authContext.login_route == null ||
       authContext.login_route == undefined
@@ -28,6 +28,7 @@ const LogOutModal = (props) => {
       console.log('로그아웃 / 구글유저');
       try {
         const isSignedIn = await GoogleSignin.isSignedIn();
+        console.log("issigned" + isSignedIn)
         if (isSignedIn) {
           console.log('gets here'); // LOGS THIS
           await GoogleSignin.revokeAccess(); // GETS STUCK HERE

@@ -62,30 +62,6 @@ export const INSERT_USER = user_info => {
   });
 };
 
-const getAllStudents = () => {
-  return new Promise((resolve, reject) => {
-    this.db.transaction(tx => {
-      tx.executeSql('SELECT * FROM Student', [], (tx, results) => {
-        console.log('Query completed');
-        var len = results.rows.length;
-        let allStudents = '';
-        for (let i = 0; i < len; i++) {
-          let row = results.rows.item(i);
-          console.log(`Record: ${row.name}`);
-          allStudents =
-            allStudents +
-            row.studentId +
-            '. ' +
-            row.Name +
-            ' ' +
-            row.surname +
-            '\n';
-        }
-        resolve(allStudents);
-      });
-    });
-  });
-};
 export const ID_DUPLICATION_CHECK = async id => {
   const getCount = () => {
     return new Promise((resolve, reject) => {
@@ -285,12 +261,11 @@ export const SELECT_USER_INFO_BY_USERNO = async user_no => {
     });
   };
   const user_data_from_db = await get_user_data();
-  console.log('user_data promise' + JSON.stringify(user_data_from_db));
   return user_data_from_db;
 };
 
 export const SELECT_USER_INFO_BY_ID = async id => {
-  const user_data = {
+  let user_data = {
     id: '',
     pwd: '',
     job: '',
@@ -301,9 +276,9 @@ export const SELECT_USER_INFO_BY_ID = async id => {
     job: '',
     user_no: 0,
   };
-  const get_user_data = () => {
-    return new Promise((resolve, reject) => {
-      DB.transaction(tx => {
+  const get_user_data = async () => {
+    return new Promise( async (resolve, reject) => {
+      await DB.transaction(tx => {
         tx.executeSql(
           'SELECT id, pwd, job, name, email, image, regi_date, job, user_no FROM user_info WHERE id=?',
           [id],
@@ -316,7 +291,6 @@ export const SELECT_USER_INFO_BY_ID = async id => {
             user_data.job = res.rows.item(0).job;
             user_data.regi_date = res.rows.item(0).regi_date;
             user_data.image = res.rows.item(0).image;
-            console.log('user_data in fun' + JSON.stringify(user_data));
             resolve(user_data);
           },
           error => {
@@ -327,7 +301,6 @@ export const SELECT_USER_INFO_BY_ID = async id => {
     });
   };
   const user_data_from_db = await get_user_data();
-  console.log('user_data promise' + JSON.stringify(user_data_from_db));
   return user_data_from_db;
 };
 

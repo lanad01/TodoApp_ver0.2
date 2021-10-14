@@ -4,7 +4,7 @@ import {  Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, 
 
 import { AuthContext } from '../../../../context/authcontext';
 import OneButtonModal from '../../../../modal/OneButtonModal';
-import { RESET_PWD } from '../../../../userTableConnection';
+import { RESET_PWD } from '../../../../sqliteConnection/userTableConnection';
 import { styles } from '../style/profileResetPwd';
 
 export const ProfileResetPwd = ({ navigation }) => {

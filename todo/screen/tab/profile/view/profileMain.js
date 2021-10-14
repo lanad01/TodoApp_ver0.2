@@ -39,20 +39,22 @@ export const ProfileMain = ({ navigation }) => {
   }, []);
 
   const goToEdit = () => {
-    //TaskList, Profile Screen 화면에서는 HardWareBackButton을 누를 시 Alert창을 출력
-    //하지만 Edit로 depth가 깊어지면서는 스택을 바탕으로한 뒤로가기버튼이 수행되도록 BackHEvent를 삭제
-    BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    BackHandler.removeEventListener('hardwareBackPress',   onBackPress);
     console.log('BackHandler 삭제');
     navigation.push('ProfileEdit');
   };
   useEffect(() => {
-    // 오로직 프로필 스크린에서만 BackHandler를 적용시켜보자
     console.log('Profile Screen Mount'); // 첨에만 발동
     const subscribe = navigation.addListener('focus', () => {
       //foucs될 때마다 발동 , 이게 핵심
+      console.log("addListener Mount")
       BackHandler.addEventListener('hardwareBackPress', onBackPress);
     });
-    return subscribe;
+    return () => {
+      console.log("RETURN CALL")
+      BackHandler.removeEventListener('hardwareBackPress',onBackPress)
+      subscribe
+    };
   }, []);
 
 

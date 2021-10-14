@@ -11,7 +11,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { DPW } from '../../../config/dp';
-import { ID_DUPLICATION_CHECK } from '../../../userTableConnection';
+import { ID_DUPLICATION_CHECK } from '../../../sqliteConnection/userTableConnection';
 import { styles } from '../style/assignScreenStyle';
 import OneButtonModal from '../../../modal/OneButtonModal';
 

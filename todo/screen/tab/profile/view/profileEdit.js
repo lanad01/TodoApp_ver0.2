@@ -11,7 +11,7 @@ import {
 
 import { AuthContext } from '../../../../context/authcontext';
 import { PwdChangeModal } from '../../../../modal/PwdChangeModal';
-import { UPDATE_USER_INFO } from '../../../../userTableConnection';
+import { UPDATE_USER_INFO } from '../../../../sqliteConnection/userTableConnection';
 import { styles } from '../style/profileEditStyle';
 import OneButtonModal from '../../../../modal/OneButtonModal';
 import { ProfileChooseModal } from '../../../../modal/ProfileChooseModal';
@@ -34,6 +34,7 @@ const ProfileEdit = ({ navigation }) => {
       'https://icon-library.com/images/profile-icon/profile-icon-7.jpg';
   }
 
+  
   // 프로필 수정 완료 버튼 Press
   const saveConfirm = () => {
     if (newName === null) {

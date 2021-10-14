@@ -24,7 +24,7 @@ import {
   SELECT_USER_INFO_BY_ID,
   DELETE_TEMP,
   SOCIAL_LOGIN,
-} from '../../userTableConnection';
+} from '../../sqliteConnection/userTableConnection';
 import { styles } from './authScreenStyle';
 import { Loading } from '../../modal/Loading';
 import OneButtonModal from '../../modal/OneButtonModal';
@@ -66,12 +66,10 @@ export const authScreen = ({ navigation }) => {
   //자동로그인 시 authContext에 저장하기 위한 user정보
   const getInfoWhenAutoLogin = async user_no => {
     try {
-      setLoading(true)
       const userInfo = await SELECT_USER_INFO_BY_USERNO(user_no);
-      send_to_context(userInfo)
+      send_to_context(userInfo);
       authContext.autologin = true; //자동로그인이므로 autologin값 true
       // AsyncStorage.setItem('user_no', JSON.stringify(authContext.user_no)); - 이미 존재 필요없다
-      setLoading(false)
       navigation.replace('TabRoot');
     } catch (err) {
       console.log(
@@ -106,12 +104,12 @@ export const authScreen = ({ navigation }) => {
 
   //일반 로그인 성공 시 context에 담을 user 정보 get
   const getUser_no = async () => {
-    setLoading(true)
+    setLoading(true);
     const userInfo = await SELECT_USER_INFO_BY_ID(id);
     AsyncStorage.setItem('user_no', JSON.stringify(userInfo.user_no)); // 자동로그인이 아니므로 필요
-    send_to_context(userInfo)
+    send_to_context(userInfo);
     authContext.autologin = false;
-    setLoading(false)
+    setLoading(false);
     navigation.replace('TabRoot');
     // replace 새로운 스택route로 바꾸기 때문에 authScreen이 stack Index에 존재하지 않게 된다
   };
@@ -126,9 +124,7 @@ export const authScreen = ({ navigation }) => {
         if (token != null) {
           // 카카오 로그인 성공
           const kakao_userInfo = await getKakaoProfile();
-          
           SOCIAL_LOGIN(kakao_userInfo, 'kakao');
-          console.log('user id kakao ' + kakao_userInfo.id);
           social_id = kakao_userInfo.id;
         }
       } catch (err) {
@@ -146,23 +142,25 @@ export const authScreen = ({ navigation }) => {
         console.log('Google login failed ' + JSON.stringify(err));
       }
     }
-    const social_login_user_info = await SELECT_USER_INFO_BY_ID(social_id);
-    console.log('Social user Info' + JSON.stringify(social_login_user_info));
-    send_to_context(social_login_user_info)
-    AsyncStorage.setItem(
-      'user_no',
-      JSON.stringify(social_login_user_info.user_no),
-    ); // 필요
-    // context 값 선언 방법 변경 권장 export
-    authContext.autologin = false;
-    authContext.login_route = 'google'; // 구글로그인 루트 설정
-    navigation.replace('TabRoot');
+    let social_login_user_info = {};
+    setTimeout(async () => {
+      social_login_user_info = await SELECT_USER_INFO_BY_ID(social_id);
+      send_to_context(social_login_user_info);
+      AsyncStorage.setItem(
+        'user_no',
+        JSON.stringify(social_login_user_info.user_no),
+      ); // 필요
+      // context 값 선언 방법 변경 권장 export
+      authContext.autologin = false;
+      authContext.login_route = type; // 구글로그인 루트 설정
+      navigation.replace('TabRoot');
+    }, 1000);
+    
   };
 
   //DB에서 얻어온 userInfo를 context에 저장
   const send_to_context = userInfo => {
-    console.log("send to context "+JSON.stringify(userInfo))
-    authContext.user_no = userInfo.user_no;  
+    authContext.user_no = userInfo.user_no;
     authContext.id = userInfo.id;
     authContext.pwd = userInfo.pwd;
     authContext.name = userInfo.name;
@@ -170,7 +168,7 @@ export const authScreen = ({ navigation }) => {
     authContext.job = userInfo.job;
     authContext.regi_date = userInfo.regi_date;
     authContext.image = userInfo.image;
-  }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.headerText}> TO DO LIST</Text>

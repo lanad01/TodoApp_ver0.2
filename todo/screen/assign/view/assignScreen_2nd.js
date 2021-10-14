@@ -7,14 +7,12 @@ import {
   TextInput,
   Keyboard,
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import Modal from 'react-native-modal'
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { DPW } from '../../../config/dp';
 import { styles } from '../style/assignScreenPhotoStyle';
 import { AuthContext } from '../../../context/authcontext';
-import { SELECT_USER_INFO_BY_ID, INSERT_USER} from '../../../userTableConnection';
+import { SELECT_USER_INFO_BY_ID, INSERT_USER} from '../../../sqliteConnection/userTableConnection';
 import { ProfileChooseModal } from '../../../modal/ProfileChooseModal';
 
 export default AssignScreen_2nd = ({ route, navigation }) => {
@@ -65,10 +63,6 @@ export default AssignScreen_2nd = ({ route, navigation }) => {
   //Insert 후 유저정보를 authContext에 저장
   const select = async () => {
       const result = await SELECT_USER_INFO_BY_ID(id);
-      console.log("result check assin2" +result.id)
-      console.log("result check assin2" +result.pwd)
-      console.log("result check assin2" +result.name)
-      console.log("result check assin2" +result.email)
       authContext.id = result.id;
       authContext.name = result.name;
       authContext.email = result.email;

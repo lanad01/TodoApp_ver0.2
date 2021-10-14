@@ -1,6 +1,5 @@
 import SQLite from 'react-native-sqlite-storage';
-import moment from 'moment';
-import { BACKGROUND_ALARM_ABOUT_TO_EXPIRED_DATE } from './pushAlarm';
+import { BACKGROUND_ALARM_ABOUT_TO_EXPIRED_DATE } from '../pushAlarm';
 export const DB = SQLite.openDatabase(
   {
     name: 'testDB5',
@@ -12,7 +11,7 @@ export const DB = SQLite.openDatabase(
     console.log(err);
   },
 );
-export const CREATE_TASK_TABLE = () =>
+export const CREATE_TASK_TABLE = () => {
   DB.transaction(tx => {
     tx.executeSql(
       'CREATE TABLE IF NOT EXISTS task_info3 (' +
@@ -34,20 +33,126 @@ export const CREATE_TASK_TABLE = () =>
       },
     );
   });
-export const GET_DATE = (authNo, taskname) => {
+};
+export const INSERT_TASK = taskInfo => {
+  console.log('INSERT TASK ARG CHECK' + JSON.stringify(taskInfo));
   DB.transaction(tx => {
     tx.executeSql(
-      'SELECT exp_date FROM task_info2 WHERE user_no=? AND task_name=?',
-      [authNo, taskname],
+      'INSERT INTO task_info2 (user_no, task_name, priority, exp, exp_date, performed ) VALUES (?,?,?,?,?,false)',
+      [
+        taskInfo.user_no,
+        taskInfo.task_name,
+        taskInfo.priority,
+        taskInfo.exp,
+        taskInfo.exp_date,
+      ],
       (tx, res) => {
-        console.log('인서트 확인');
-        console.log(res.rows.item(0).exp_date);
+        console.log('Insert Success');
+        GET_DATE(taskInfo.user_no, taskInfo.task_name);
       },
       error => {
-        console.log('Task table created fail ' + JSON.stringify(error));
+        console.log('Insert Failed' + JSON.stringify(error));
       },
     );
   });
+};
+export const DELETE_TASK = (task_index, task_no) => {
+  DB.transaction(tx => {
+    tx.executeSql(
+      'DELETE FROM task_info2 WHERE task_no=?', //수령한 task_no에 해당하는 row 삭제
+      [task_no],
+      (tx, res) => {
+        console.log('Delete Success');
+        // 배열 정보에서 삭제
+      },
+      error => {
+        console.log('Delete Failed' + error);
+      },
+    );
+  });
+};
+
+export const UPDATE_TASK = taskInfo => {
+  console.log('UPDATE TASK ARG CHECK' + JSON.stringify(taskInfo));
+  DB.transaction(tx => {
+    tx.executeSql(
+      //상위 컴포넌트에서 호출시킨 task_no의 데이터를 Update
+      'UPDATE task_info2 SET task_name=?, priority=?, exp=? WHERE task_no=?',
+      [taskInfo.task_name, taskInfo.priority, taskInfo.exp, taskInfo.task_no],
+      (tx, res) => {
+        console.log('Update Task Success');
+      },
+      error => {
+        console.log('Update Task Failed' + JSON.stringify(error));
+      },
+    );
+  });
+};
+export const SELECT_TASK_BY_TASKNO = async task_no => {
+  const taskInfo = {
+    task_name: '',
+    priority: '',
+    exp: '',
+  };
+  const task_from_db = () => {
+    return new Promise((resolve, reject) => {
+      DB.transaction(tx => {
+        tx.executeSql(
+          'SELECT task_name,priority,exp, exp_date FROM task_info2 WHERE task_no=?',
+          [task_no],
+          (tx, res) => {
+            taskInfo.task_name = res.rows.item(0).task_name
+            taskInfo.priority = res.rows.item(0).priority
+            taskInfo.exp = res.rows.item(0).exp
+            resolve(taskInfo)
+          },
+          error => {
+            console.log('Delete Failed' + error);
+          },
+        );
+      });
+    });
+  };
+  const result = await task_from_db();
+  return result
+};
+export const SELECT_TASKLIST_BY_USERNO = async user_no => {
+  const task_data = [];
+  const taskList_from_db = () => {
+    return new Promise((resolve, reject) => {
+      DB.transaction(tx => {
+        console.log('taskList ListSelect mounted');
+        tx.executeSql(
+          'SELECT task_no, task_name, priority, exp, performed FROM task_info2 WHERE user_no=?',
+          [user_no],
+          (tx, res) => {
+            let len = res.rows.length;
+            if (len === 0) {
+              console.log('Array length 0');
+            } else if (len > 0) {
+              for (let i = 0; i < len; i++) {
+                //context에 조회된 데이터 row수만큼 배열 생성
+                task_data[i] = {
+                  task_no: res.rows.item(i).task_no,
+                  user_no: user_no,
+                  task_name: res.rows.item(i).task_name,
+                  priority: res.rows.item(i).priority,
+                  exp: res.rows.item(i).exp,
+                  performed: res.rows.item(i).performed,
+                };
+              }
+            }
+            resolve(task_data);
+          },
+          error => {
+            console.log('Failed' + error);
+          },
+        );
+      });
+    });
+  };
+  const result = await taskList_from_db();
+  return result;
 };
 
 //기한 임박인 Task 존재 여부 확인
@@ -104,41 +209,24 @@ export const CHECK_EXP_OF_TASKS = user_no => {
 };
 
 export const GET_BADGE_VALUE = async user_no => {
-  const badge = {
-    count: 0,
-  };
-  await DB.transaction(async tx => {
-    //badge 형성을 위해 해당 user_no의 남아있는 todoList length 출력
-    tx.executeSql(
-      'SELECT count(task_no) as count FROM task_info2 WHERE user_no=?',
-      [user_no],
-      (tx, res) => {
-        badge.count = res.rows.item(0).count;
-      },
-    );
-  });
-  return badge;
-};
-
-export const DB_MODULE = async user_no => {
-  const user = {
-    id: '12',
-    pwd: '12',
-  };
-  await DB.transaction(tx => {
-    tx.executeSql(
-      'SELECT id, pwd FROM user_info WHERE user_no=?',
-      [user_no],
-      (tx, res) => {
-        user.id = res.rows.item(0).id;
-        user.pwd = res.rows.item(0).pwd;
-      },
-      error => {
-        console.log(JSON.stringify(error));
-      },
-    );
-  });
-  return user;
+  let badge = 0
+  const get_badge_count = () => {
+    return new Promise( (resolve, reject)=>{
+      DB.transaction(async tx => {
+        //badge 형성을 위해 해당 user_no의 남아있는 todoList length 출력
+        tx.executeSql(
+          'SELECT count(task_no) as count FROM task_info2 WHERE user_no=?',
+          [user_no],
+          (tx, res) => {
+            badge = res.rows.item(0).count;
+            resolve(badge)
+          },
+        );
+      });
+    })
+  }
+  const result = await get_badge_count()
+  return result;
 };
 
 export const DELETE_TEMP = () => {
