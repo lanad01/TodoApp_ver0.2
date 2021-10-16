@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   SafeAreaView,
@@ -11,27 +11,10 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { DPW } from '../../../config/dp';
-import { ID_DUPLICATION_CHECK } from '../../../sqliteConnection/userTableConnection';
 import { styles } from '../style/assignScreenStyle';
-import OneButtonModal from '../../../modal/OneButtonModal';
 
-export default AssignScreen_1st = ({ navigation }) => {
-  const idRef = useRef(); // useRefsms Dom을 부른다
-  const pwdRef = useRef();
-
-  const [id, setId] = useState(null);
-  const [idNull, setIdNull] = useState(false);
-  const [idNNMessage, setIdNNMessage] = useState();
-  const [dupIdError, setDupIdError] = useState(false);
-
-  const [pwd, setpwd] = useState(null);
-  const [pwdNull, setPwdNull] = useState(false);
-  const [pwdNNMsg, setPwdNNMsg] = useState();
-
-  const [job, setJob] = useState(null);
-  const [email, setEmail] = useState(null);
+export default AssignScreen_1st = (props) => {
   const [rise, setRise] = useState(0);
-
   useEffect(() => {
     const hide = Keyboard.addListener('keyboardDidHide', e => {
       // 키보드가 사라지면 화면을 직접 내려버린다.
@@ -47,50 +30,6 @@ export default AssignScreen_1st = ({ navigation }) => {
       []
     );
   });
-  const modalOff = () => {
-    setDupIdError(false);
-    idRef.current.focus(); //중복오류 발생 시 id작성란에 focus
-  };
-  async function nextPage() {
-    // >(next) 버튼 눌렀을 때.
-    if (id === null && pwd != null) {
-      //id Null
-      setIdNull(true);
-      setIdNNMessage(' !! ID는 반드시 입력해주셔야 합니다.');
-      idRef.current.focus();
-    } else if (pwd === null && id != null) {
-      // Pwd Null
-      setPwdNull(true);
-      setPwdNNMsg(' !! 암호는 반드시 입력해주셔야 합니다. ');
-      pwdRef.current.focus();
-    } else if (id === null && pwd === null) {
-      // id Pwd null
-      setPwdNull(true);
-      setPwdNNMsg(' !! 암호는 반드시 입력해주셔야 합니다. ');
-      setIdNull(true);
-      setIdNNMessage(' !! ID는 반드시 입력해주셔야 합니다.');
-      idRef.current.focus();
-    } else if (pwd != null && id != null) {
-      // Both Not null
-      setIdNNMessage('');
-      setPwdNNMsg('');
-      //얻어와보자 count를
-      const count = await ID_DUPLICATION_CHECK(id); //ID와 일치하는 기존 아이디 개수 // 0이면 중복없음 => 가입 가능
-      console.log('Count check at Screen' + count);
-      if (count > 0) {
-        console.log('중복된 아이디 존재');
-        setDupIdError(true);
-      } else if (count == 0) {
-        console.log('중복아이디 없음');
-        navigation.push('Assign2nd', {
-          id: id,
-          pwd: pwd,
-          job: job,
-          email: email,
-        });
-      }
-    }
-  }
   return (
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -106,7 +45,7 @@ export default AssignScreen_1st = ({ navigation }) => {
           }}>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.headerText}> Register </Text>
-            <TouchableOpacity onPress={nextPage}>
+            <TouchableOpacity onPress={props.nextpage}>
               <View style={styles.nextBtnContainer}>
                 <Image
                   source={require('../../../assets/images/Next.jpg')}
@@ -120,27 +59,27 @@ export default AssignScreen_1st = ({ navigation }) => {
           </Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.category}> ID</Text>
-            <Text style={styles.nnMsg}> {idNNMessage}</Text>
+            <Text style={styles.nnMsg}> {props.idNNMessage}</Text>
           </View>
           <TextInput
             style={styles.input}
             maxLength={30}
             placeholder=" Please type ID :)"
-            onChangeText={id => setId(id)}
-            ref={idRef}
+            onChangeText={ id => props.setUserData('id', id)}
+            ref={props.idRef}
           />
 
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.category}> Password </Text>
-            <Text style={styles.nnMsg}> {pwdNNMsg}</Text>
+            <Text style={styles.nnMsg}> {props.pwdNNMsg}</Text>
           </View>
           <TextInput
             style={styles.pwdinput}
             secureTextEntry={true}
             maxLength={30}
             placeholder=" Please Fill your Password!"
-            onChangeText={pwd => setpwd(pwd)}
-            ref={pwdRef}
+            onChangeText={pwd =>props.setUserData('pwd', pwd)}
+            ref={props.pwdRef}
           />
 
           <Text style={styles.category}> Job </Text>
@@ -148,7 +87,7 @@ export default AssignScreen_1st = ({ navigation }) => {
             style={styles.input}
             maxLength={30}
             placeholder=" Fell free to type here :)"
-            onChangeText={job => setJob(job)}
+            onChangeText={job => props.setUserData('job', job)}
             onFocus={() => setRise(160)}
           />
 
@@ -158,16 +97,11 @@ export default AssignScreen_1st = ({ navigation }) => {
             keyboardType={'email-address'}
             maxLength={30}
             placeholder=" email@example.com"
-            onChangeText={email => setEmail(email)}
+            onChangeText={email => props.setUserData('email',email)}
             onFocus={() => setRise(350)}
           />
         </View>
       </TouchableWithoutFeedback>
-      <OneButtonModal
-        modalOn={dupIdError}
-        modalOff={modalOff}
-        message={'중복된 아이디가 존재합니다.'}
-      />
     </SafeAreaView>
   );
 };

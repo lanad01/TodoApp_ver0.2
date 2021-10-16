@@ -182,7 +182,7 @@ export const UPDATE_USER_INFO = info => {
 };
 
 export const LOGIN_VALIDATION = async (id, pwd) => {
-  console.log('LOGIN VALIDATION' + id + '  / ' + pwd);
+  console.log('LOGIN VALIDATION : ' + id + '  / ' + pwd);
   const id_pwd_check = () => {
     return new Promise((resolve, reject) => {
       DB.transaction(tx => {

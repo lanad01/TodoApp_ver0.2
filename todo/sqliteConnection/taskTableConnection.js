@@ -14,7 +14,7 @@ export const DB = SQLite.openDatabase(
 export const CREATE_TASK_TABLE = () => {
   DB.transaction(tx => {
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS task_info3 (' +
+      'CREATE TABLE IF NOT EXISTS task_info2 (' +
         'task_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,' +
         'user_no INTEGER NOT NULL,' +
         'task_name VARCHAR(50) NOT NULL,' +
@@ -56,7 +56,7 @@ export const INSERT_TASK = taskInfo => {
     );
   });
 };
-export const DELETE_TASK = (task_index, task_no) => {
+export const DELETE_TASK = (task_no) => {
   DB.transaction(tx => {
     tx.executeSql(
       'DELETE FROM task_info2 WHERE task_no=?', //수령한 task_no에 해당하는 row 삭제
@@ -132,11 +132,15 @@ export const SELECT_TASKLIST_BY_USERNO = async user_no => {
             } else if (len > 0) {
               for (let i = 0; i < len; i++) {
                 //context에 조회된 데이터 row수만큼 배열 생성
+                let priority=res.rows.item(0).priority
+                if(priority==undefined){
+                  priority="Middle"
+                }
                 task_data[i] = {
                   task_no: res.rows.item(i).task_no,
                   user_no: user_no,
                   task_name: res.rows.item(i).task_name,
-                  priority: res.rows.item(i).priority,
+                  priority: priority,
                   exp: res.rows.item(i).exp,
                   performed: res.rows.item(i).performed,
                 };
@@ -145,7 +149,7 @@ export const SELECT_TASKLIST_BY_USERNO = async user_no => {
             resolve(task_data);
           },
           error => {
-            console.log('Failed' + error);
+            console.log('Failed' + JSON.stringify(error));
           },
         );
       });
@@ -263,3 +267,55 @@ export const GET_DATE = (authNo, taskname) => {
     );
   });
 };
+
+export const UPDATE_TASK_PERFORMED = async (task_no) => {
+  console.log("UPDATE TASK PERFORMED TASK NO : "+task_no)
+  const completed = () => {
+    return new Promise( async (resolve, reject) => {
+      await DB.transaction(tx => {
+        tx.executeSql(
+          'UPDATE task_info2 SET performed=? WHERE task_no=?',
+          [true,task_no],
+          (tx, res) => {
+            let result=true
+            resolve(result)
+          },
+          error => {
+            console.log('Failed' + JSON.stringify(error));
+          },
+        );
+      });
+    });
+  };
+  const result = await completed();
+  return result;
+} 
+
+
+export const SELECT_EXP_DATE_OF_TASKS = async (user_no) => {
+  const exp_date_array = []
+  const getDates = () => {
+    return new Promise( async (resolve, reject) => {
+      await DB.transaction(tx => {
+        tx.executeSql(
+          'SELECT exp_date FROM task_info2 WHERE user_no=? AND performed=?',
+          [user_no, false],
+          (tx, res) => {
+            Array(res.rows.length)
+            .fill(res.rows)
+            .map((v, i)=>{
+              exp_date_array.push(v.item(i).exp_date)
+            })
+            resolve(exp_date_array)
+          },
+          error => {
+            console.log('Failed' + JSON.stringify(error));
+          },
+        );
+      });
+     
+    });
+  };
+  const result = await getDates();
+  return result;
+} 

@@ -11,4 +11,7 @@ export const TodoContext = React.createContext({
     task_exp:[],
     render:false,
     performed: [],
+    //요렇게 해보자
+    taskInfo: [],
+    list_of_date : [],
 });

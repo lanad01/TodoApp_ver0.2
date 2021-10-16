@@ -20,21 +20,33 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     marginHorizontal: 20 * DPW,
+    
   },
   card: {
     shadowOpacity: 0.5,
     elevation: 7,
-    height: 160 * DPW,
+    height: 180 * DPW,
     width: 550 * DPW,
     alignSelf: 'center',
     marginTop: 10 * DPW,
     marginBottom: 15 * DPW,
+
+  },
+  card_perfomed:{
+    shadowOpacity: 0.5,
+    elevation: 7,
+    height: 180 * DPW,
+    width: 550 * DPW,
+    alignSelf: 'center',
+    marginTop: 10 * DPW,
+    marginBottom: 15 * DPW,
+    backgroundColor:'#DCDCDC',
   },
   rowBack: {
     alignItems: 'center',
     alignSelf: 'center',
     backgroundColor: 'red',
-    height: 160 * DPW,
+    height: 180 * DPW,
     width: 550 * DPW,
     borderRadius: 15,
     flexDirection: 'row',
@@ -46,10 +58,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    height: 160 * DPW,
+    height: 180 * DPW,
   },
   task1st: {
     flexDirection: 'row',
+  },
+  task2nd:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 10,
   },
   taskName: {
     fontFamily: 'BMJUA',
@@ -70,7 +87,24 @@ export const styles = StyleSheet.create({
     fontSize: 30 * DPW,
     justifyContent: 'center',
     alignSelf: 'flex-start',
-    marginTop: 10 * DPW,
+    top:8 * DPW,
+    marginTop: 20 * DPW,
+  },
+  completeBtnView:{
+     marginLeft: 20 * DPW,
+      marginTop: 12 * DPW 
+  },
+  completeTextView:{
+    width: 55,
+    height: 30,
+    textAlign: 'center',
+    fontFamily:'BMJUA',
+    borderColor:'black',
+    borderWidth:5,
+    borderRadius:7,
+    backgroundColor:'black',
+    color:'white',
+    paddingTop:7
   },
   backRightBtn: {
     alignItems: 'center',

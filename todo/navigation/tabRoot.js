@@ -6,7 +6,6 @@ import { styles } from './styles/tabsScreenStyle';
 import { ProfileRoot } from './profileRoot';
 import { TodoContext } from '../context/todoContext';
 import { AuthContext } from '../context/authcontext';
-import { TaskScreen } from '../screen/tab/task/view/taskScreen';
 import {
   CREATE_TASK_TABLE,
   GET_BADGE_VALUE,
@@ -14,7 +13,8 @@ import {
 import { AUTO_LOGIN_PUSH_ALARM } from '../pushAlarm';
 import LogOutModal from '../modal/LogOutModal';
 import { useNavigation } from '@react-navigation/core';
-
+import { TaskScreen_Data } from '../screen/tab/task/data/taskScreen_data';
+import  Calendar  from '../screen/tab/calendar/calendar'
 export const TabRoot = props => {
   console.log('TabRoot ');
   const navigation = useNavigation();
@@ -128,13 +128,18 @@ export const TabRoot = props => {
         />
         <Tabs.Screen
           name="TaskScreen"
-          component={TaskScreen}
+          component={TaskScreen_Data}
           options={taskScreen_Opt}
           listeners={({}) => ({
             tabPress: e => {
               setTaskListWritten(true);
             },
           })}
+        />
+        <Tabs.Screen
+          name="Calendar"
+          component={Calendar}
+          options={profileScreen_Opt}
         />
       </Tabs.Navigator>
     </TodoContext.Provider>

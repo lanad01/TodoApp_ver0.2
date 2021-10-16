@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import { Picker } from '@react-native-picker/picker';
@@ -12,7 +12,6 @@ import { styles } from './styles/addModalStyle';
 export const AddModal = props => {
   const authContext = React.useContext(AuthContext);
   const [loading, setLoading] = useState(false); // 로딩화면
-
   const [open, setOpen] = useState(false); // 달력 모달 오픈
   const [taskName, setTaskName] = React.useState(null); // Task이름
   const [priority, setPriority] = React.useState(); // 우선순위
@@ -56,7 +55,7 @@ export const AddModal = props => {
             <TextInput
               style={styles.taskInput}
               onChangeText={taskName => setTaskName(taskName)}
-              maxLength={20}></TextInput>
+              maxLength={20}/>
           </View>
           <View style={styles.priorContainer}>
             <Text style={styles.category2}>우선순위 : </Text>

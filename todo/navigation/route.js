@@ -7,7 +7,7 @@ import messaging from '@react-native-firebase/messaging';
 import { AuthContext } from '../context/authcontext';
 import { TabRoot } from './tabRoot';
 import { AssignRoot } from './assignRoot';
-import { authScreen } from '../screen/auth/authScreen';
+import { AuthScreen, authScreen, AuthDataHandle } from '../screen/auth/authScreen_data';
 import { CHECK_EXP_OF_TASKS } from '../sqliteConnection/taskTableConnection';
 import { CREATE_USER_TABLE } from '../sqliteConnection/userTableConnection';
 import { Alert, AppState } from 'react-native';
@@ -80,7 +80,7 @@ export default () => {
             component={TabRoot}
             options={opt}
           />
-          <MainStack.Screen name="Auth" component={authScreen} options={opt} />
+          <MainStack.Screen name="Auth" component={AuthDataHandle} options={opt} />
           <MainStack.Screen
             name="AssignRoot"
             component={AssignRoot}
