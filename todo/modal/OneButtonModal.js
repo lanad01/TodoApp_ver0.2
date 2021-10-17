@@ -11,7 +11,6 @@ import Modal from 'react-native-modal';
 
 const OneButtonModal = props => {
 
-
   return (
     <Modal
       isVisible={props.modalOn}

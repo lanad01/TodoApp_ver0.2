@@ -7,7 +7,7 @@ export const ProfileMain_Data = ({ navigation }) => {
   // 화면 Swipe 결과 실행
   function onSwipe(gestureName) {
     console.log('GestureName :' + gestureName);
-    if (gestureName === 'SWIPE_LEFT') navigation.navigate('TaskScreen'); //Swipe Left할 시 Screen.Task로 이동
+    if (gestureName === 'SWIPE_LEFT') navigation.navigate('Task'); //Swipe Left할 시 Screen.Task로 이동
   }
 
   //Profile Screen에서 HardwareBackBtn을 눌렀을 시 발생하는 컨펌 Alert

@@ -319,3 +319,29 @@ export const SELECT_EXP_DATE_OF_TASKS = async (user_no) => {
   const result = await getDates();
   return result;
 } 
+
+export const SELECT_TASK_BY_EXP_DATE = async (date, user_no) => {
+  let tasks = []
+  const getTasks_by_date = () => {
+    return new Promise( async (resolve, reject) => {
+      await DB.transaction(tx => {
+        tx.executeSql(
+          'SELECT task_no, task_name, priority, exp, exp_date, performed FROM task_info2 WHERE exp_date=? And user_no=?',
+          [date,user_no],
+          (tx, res) => {
+            for(let i=0; i<res.rows.length; i++){
+              tasks.push(res.rows.item(i))
+            }
+            resolve(tasks)
+          },
+          error => {
+            console.log('Failed' + JSON.stringify(error));
+          },
+        );
+      });
+     
+    });
+  };
+  const result = await getTasks_by_date();
+  return result;
+} 

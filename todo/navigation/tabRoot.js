@@ -14,7 +14,8 @@ import { AUTO_LOGIN_PUSH_ALARM } from '../pushAlarm';
 import LogOutModal from '../modal/LogOutModal';
 import { useNavigation } from '@react-navigation/core';
 import { TaskScreen_Data } from '../screen/tab/task/data/taskScreen_data';
-import  Calendar  from '../screen/tab/calendar/calendar'
+import Calendar from '../screen/tab/calendar/calendar';
+import { LIGNT_CYAN } from '../config/color';
 export const TabRoot = props => {
   console.log('TabRoot ');
   const navigation = useNavigation();
@@ -36,7 +37,7 @@ export const TabRoot = props => {
         console.log('ERROR' + err);
       }
     };
-    const subscribe = navigation.addListener('focus', getBadge );
+    const subscribe = navigation.addListener('focus', getBadge);
     return subscribe;
   }, []);
 
@@ -53,6 +54,22 @@ export const TabRoot = props => {
     setLogoutModal(false);
     props.navigation.navigate('Auth');
   };
+
+  const logoutBtn = () => {
+    return (
+      <TouchableOpacity
+        style={styles.btnView}
+        onPress={() => setLogoutModal(true)}>
+        <Text style={styles.logoutBtn}>Logout</Text>
+        <LogOutModal
+          modalOn={logoutModal}
+          modalOff={() => setLogoutModal(false)}
+          message="로그아웃 하시겠습니까?"
+          gobackHome={logoutImple}
+        />
+      </TouchableOpacity>
+    );
+  };
   //Profile screen Configure
   const profileScreen_Opt = () => {
     return {
@@ -60,19 +77,7 @@ export const TabRoot = props => {
       tabBarLabelStyle: styles.tabbarLabel,
       headerStyle: { backgroundColor: '#E0ffff' },
       headerTitleStyle: styles.headerTitleStyle,
-      headerRight: () => (
-        <TouchableOpacity
-          style={styles.btnView}
-          onPress={() => setLogoutModal(true)}>
-          <Text style={styles.logoutBtn}>Logout</Text>
-          <LogOutModal
-            modalOn={logoutModal}
-            modalOff={() => setLogoutModal(false)}
-            message="로그아웃 하시겠습니까?"
-            gobackHome={logoutImple}
-          />
-        </TouchableOpacity>
-      ),
+      headerRight: () => logoutBtn(),
       tabBarIcon: ({}) => {
         return (
           <Image
@@ -91,20 +96,8 @@ export const TabRoot = props => {
       tabBarActiveTintColor: '#00af9d',
       tabBarLabelStyle: styles.tabbarLabel,
       headerTitleStyle: styles.headerTitleStyle,
-      headerStyle: { backgroundColor: '#E0ffff' },
-      headerRight: () => (
-        <TouchableOpacity
-          style={styles.btnView}
-          onPress={() => setLogoutModal(true)}>
-          <Text style={styles.logoutBtn}>Logout</Text>
-          <LogOutModal
-            modalOn={logoutModal}
-            modalOff={() => setLogoutModal(false)}
-            message="로그아웃 하시겠습니까?"
-            gobackHome={logoutImple}
-          />
-        </TouchableOpacity>
-      ),
+      headerStyle: { backgroundColor: LIGNT_CYAN },
+      headerRight: () => logoutBtn(),
       tabBarIcon: ({}) => {
         return (
           <Image
@@ -116,6 +109,23 @@ export const TabRoot = props => {
     };
   };
 
+  const calnerdarScreen_opt = () => {
+    return {
+      tabBarActiveTintColor: '#00af9d',
+      tabBarLabelStyle: styles.tabbarLabel,
+      headerStyle: { backgroundColor: LIGNT_CYAN },
+      headerTitleStyle: styles.headerTitleStyle,
+      headerRight: () => logoutBtn(),
+      tabBarIcon: ({}) => {
+        return (
+          <Image
+            source={require('../assets/images/calendar-icon.png')}
+            style={styles.tabbarIcon}
+          />
+        );
+      },
+    };
+  };
   const Tabs = createBottomTabNavigator();
   return (
     //컴포넌트화
@@ -127,7 +137,7 @@ export const TabRoot = props => {
           options={profileScreen_Opt}
         />
         <Tabs.Screen
-          name="TaskScreen"
+          name="Task"
           component={TaskScreen_Data}
           options={taskScreen_Opt}
           listeners={({}) => ({
@@ -139,7 +149,7 @@ export const TabRoot = props => {
         <Tabs.Screen
           name="Calendar"
           component={Calendar}
-          options={profileScreen_Opt}
+          options={calnerdarScreen_opt}
         />
       </Tabs.Navigator>
     </TodoContext.Provider>

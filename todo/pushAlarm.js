@@ -27,7 +27,7 @@ export const BACKGROUND_ALARM_ABOUT_TO_EXPIRED_DATE = number_of_task_about_exp =
       title: '기한임박인 Task가 있습니다.',
       message: '총 '+number_of_task_about_exp+"개",
       date: new Date(Date.now() + 10 * 1000), // 푸쉬가 되는 시간 : 10초후
-      repeatType: 'hour', //1분마다 알람이 간다
+      repeatType: 'day', //1분마다 알람이 간다
       allowWhileIdle: true,
       showWhen: true, //시간 표시 true
       timeoutAfter:600 * 1000, // 푸쉬 time out 600초
