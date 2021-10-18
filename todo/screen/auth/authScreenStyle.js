@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
 import { DPW } from '../../config/dp';
+import { MIDNIGHT_BLUE, PALETUR } from '../../config/color';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#191970',
+    backgroundColor: MIDNIGHT_BLUE,
     alignItems: 'center',
   },
   headerText: {
@@ -15,7 +16,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'BMJUA',
   },
   bodyContainer: {
-    backgroundColor: '#191970',
+    backgroundColor: MIDNIGHT_BLUE,
     paddingHorizontal: 20 * DPW,
     marginVertical: 30 * DPW,
     width: 550 * DPW,
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'white',
     borderWidth: 3,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 38 * DPW,
   },
   pwdInput: {
@@ -44,7 +45,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 40 * DPW,
     backgroundColor: 'white',
     borderWidth: 3,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontWeight: 'bold',
     fontSize: 38 * DPW,
   },
@@ -54,7 +55,7 @@ export const styles = StyleSheet.create({
     color: 'white',
   },
   loginBtnContainer: {
-    backgroundColor: '#AFEEEE',
+    backgroundColor: PALETUR,
     height: 80 * DPW,
     alignItems: 'center',
     borderRadius: 20,
@@ -66,7 +67,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     fontFamily: 'BMJUA',
     fontSize: 50 * DPW,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     marginTop: 12 * DPW,
   },
   kakaoLogin: {

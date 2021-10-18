@@ -4,9 +4,9 @@ import Modal from 'react-native-modal';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-date-picker';
 
-import { AuthContext } from '../context/authcontext';
-import { Loading } from '../modal/Loading';
-import { INSERT_TASK } from '../sqliteConnection/taskTableConnection';
+import { AuthContext } from '../../context/authcontext';
+import { Loading } from '../../modal/Loading';
+import { INSERT_TASK } from '../../sqliteConnection/taskTableConnection';
 import { styles } from './styles/addModalStyle';
 
 export const AddModal = props => {

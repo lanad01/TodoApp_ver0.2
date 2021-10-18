@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React from 'react';
 import {  Animated,  Dimensions,  View, } from 'react-native';
 
-import { GuideModal } from '../../../../modal/GuideModal';
-import { TaskDetailModal } from '../../../../modal/TaskDetailModal';
+import { GuideModal } from '../../../modal/GuideModal';
+import { TaskDetailModal } from '../../../modal/TaskDetailModal';
 import { Loading } from '../../../../modal/Loading';
 import { TodoContext } from '../../../../context/todoContext';
 import { AuthContext } from '../../../../context/authcontext';
-import { AddModal } from '../../../../modal/AddModal';
+import { AddModal } from '../../../modal/AddModal';
 import { TaskScreen } from '../view/taskScreen';
 import {
   SELECT_TASKLIST_BY_USERNO,
@@ -17,35 +17,35 @@ import {
 const rowTranslateAnimatedValues = {};
 
 export const TaskScreen_Data = ({ navigation }) => {
-  const todoContext = useContext(TodoContext);
-  const authContext = useContext(AuthContext);
-  const [render, reRender] = useState(1); // 강제 렌더링
+  const todoContext = React.useContext(TodoContext);
+  const authContext = React.useContext(AuthContext);
+  const [render, reRender] = React.useState(1); // 강제 렌더링
 
-  const [loading, setLoading] = useState(false); // Loading 모달
-  const [addModal, setAddModal] = useState(false); //Task추가 모달
-  const [detailModal, setDetailModal] = useState(false); //Detail Task 확인 모달
-  const [detailTask_no, setDetailTask_no] = useState(); //Detail Task에 보낼 특정 Task_no
-  const [showGuideModal, setShowGuideModal] = useState(false);
+  const [loading, setLoading] = React.useState(false); // Loading 모달
+  const [addModal, setAddModal] = React.useState(false); //Task추가 모달
+  const [detailModal, setDetailModal] = React.useState(false); //Detail Task 확인 모달
+  const [detailTask_no, setDetailTask_no] = React.useState(); //Detail Task에 보낼 특정 Task_no
+  const [showGuideModal, setShowGuideModal] = React.useState(false); //가이드 애니메이션 모달
 
-  //가이드 애니메이션 출력
-  useEffect(() => {
-    console.log('TaskInfo Length  : ' + todoContext.taskInfo.length);
+  //TaskScreen이 처음 mount 될 때 가이드 애니메이션 출력
+  React.useEffect(() => {
     setShowGuideModal(true);
     return () => {
       setShowGuideModal(false);
     };
   }, []);
-
   //Todo List 출력
-  useEffect(() => {
+  React.useEffect(() => {
     const getTaskList = async () => {
-      // taskList를 받아오는 함수를 async처리
+      //현재 유저의 TaskList를 검색
       const taskList = await SELECT_TASKLIST_BY_USERNO(authContext.user_no);
       taskList.map((v, i) => {
-        todoContext.taskInfo[i] = v;
-        console.log('TaskNo   ' + todoContext.taskInfo[i].task_no);
+        todoContext.taskInfo[i] = v; //context와 동기화
+        const split=v.exp_date.split('-')
+        todoContext.task_exp[i]=new Date(split[0], split[1]-1, split[2]).getTime()
         setList(); //애니메이션 용 배열 정보를 각 iteration마다 추가하는 메소드
       });
+      console.log("왜 없던게 "+JSON.stringify(todoContext.taskInfo))
     };
     setLoading(true);
     getTaskList() //async await 활용
@@ -56,7 +56,6 @@ export const TaskScreen_Data = ({ navigation }) => {
   //Task 클릭 시 명세창 출력
   const getTaskDetail = index => {
     // index = 클릭 된 task의 task_no
-    console.log('indx' + index);
     setDetailTask_no(index); // 해당 task_no(Primary Key)의 디테일을 출력하는 모달
     setDetailModal(true);
   };
@@ -77,7 +76,7 @@ export const TaskScreen_Data = ({ navigation }) => {
     });
 
   //애니메이션 전용 Array
-  const [listData, setListData] = useState(); 
+  const [listData, setListData] = React.useState(); 
   const setList = () => {
     // task의 숫자만큼 배열 : key - index / text - 해당 task의 기본키
     setListData(
@@ -90,7 +89,7 @@ export const TaskScreen_Data = ({ navigation }) => {
     );
   };
 
-  const animationIsRunning = useRef(false); //애니메이션 액션 진행 boolean
+  const animationIsRunning = React.useRef(false); //애니메이션 액션 진행 boolean
 
   //Task Swipe시 삭제 로직
   const onSwipeValueChange = async swipeData => {
@@ -125,15 +124,11 @@ export const TaskScreen_Data = ({ navigation }) => {
       });            
     }
   };
+
+  //완료처리
   const complete = async (index, task_no) => {     
-    console.log("index  : "+index)
-    console.log("task no ?  : "+task_no)
-    const update_result = await UPDATE_TASK_PERFORMED(task_no)
-    console.log("update result : "+update_result)
-    console.log("False True? "+todoContext.taskInfo[index].performed)
-    
+    UPDATE_TASK_PERFORMED(task_no)
     todoContext.taskInfo[index].performed=true   
-    reRender(render+1)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
   }                                                                                             
   return (                                              
     <View style={{flex:1}}>                                                          

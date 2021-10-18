@@ -62,6 +62,7 @@ export const INSERT_USER = user_info => {
   });
 };
 
+//ID 중복 체크
 export const ID_DUPLICATION_CHECK = async id => {
   const getCount = () => {
     return new Promise((resolve, reject) => {
@@ -85,6 +86,7 @@ export const ID_DUPLICATION_CHECK = async id => {
   const count = await getCount();
   return count;
 };
+//소셜 로그인
 export const SOCIAL_LOGIN = (userInfo, type) => {
   let id = '';
   if (type == 'google') {
@@ -99,9 +101,9 @@ export const SOCIAL_LOGIN = (userInfo, type) => {
       (tx, res) => {
         let count = res.rows.item(0).count;
         if (count > 0) {
-          console.log('구글 아이디 중복');
+          console.log('소셜로그인 아이디 중복');
         } else if (count == 0) {
-          console.log('카카오 아이디 중복 없음 => INSERT USER');
+          console.log('소셜로그인 아이디 중복 없음 => INSERT USER');
           INSERT_USER_BY_SOCIAL_LOGIN(userInfo, type); //로그인 이력이 있는 구글ID가 아니라면 새로 Insert
         }
       },
@@ -115,6 +117,7 @@ export const SOCIAL_LOGIN = (userInfo, type) => {
   });
 };
 
+//소셜로그인 - 기존 유저 정보에 없는 ID일 시 새로 Insert
 export const INSERT_USER_BY_SOCIAL_LOGIN = async (userInfo, type) => {
   const user_data = {
     id: '',
@@ -122,12 +125,12 @@ export const INSERT_USER_BY_SOCIAL_LOGIN = async (userInfo, type) => {
     email: '',
     image: null,
   };
-  if (type == 'google') {
+  if (type == 'google') { //구글일 경우 info 얻기
     user_data.id = userInfo.user.id;
     user_data.email = userInfo.user.email;
     user_data.name = userInfo.user.name;
     user_data.image = null;
-  } else if (type == 'kakao') {
+  } else if (type == 'kakao') { // 카카오일 경우 info 얻기
     user_data.id = userInfo.id;
     user_data.name = userInfo.nickname;
     user_data.email = userInfo.email;
@@ -165,6 +168,7 @@ export const INSERT_USER_BY_SOCIAL_LOGIN = async (userInfo, type) => {
   });
 };
 
+//프로필 수정
 export const UPDATE_USER_INFO = info => {
   DB.transaction(tx => {
     tx.executeSql(
@@ -181,6 +185,7 @@ export const UPDATE_USER_INFO = info => {
   });
 };
 
+// 아이디 비밀번호 일치 확인
 export const LOGIN_VALIDATION = async (id, pwd) => {
   console.log('LOGIN VALIDATION : ' + id + '  / ' + pwd);
   const id_pwd_check = () => {
@@ -224,6 +229,8 @@ export const RESET_PWD = (user_no, newPwd) => {
   });
 };
 
+
+//유저번호를 통한 유저정보 검색
 export const SELECT_USER_INFO_BY_USERNO = async user_no => {
   const user_data = {
     id: '',
@@ -264,6 +271,7 @@ export const SELECT_USER_INFO_BY_USERNO = async user_no => {
   return user_data_from_db;
 };
 
+//id를 통한 유저정보 조회
 export const SELECT_USER_INFO_BY_ID = async id => {
   let user_data = {
     id: '',
@@ -306,26 +314,6 @@ export const SELECT_USER_INFO_BY_ID = async id => {
 
 
 
-export const DB_MODULE = async user_no => {
-  const user = {
-    id: '12',
-    pwd: '12',
-  };
-  await DB.transaction(tx => {
-    tx.executeSql(
-      'SELECT id, pwd FROM user_info WHERE user_no=?',
-      [user_no],
-      (tx, res) => {
-        user.id = res.rows.item(0).id;
-        user.pwd = res.rows.item(0).pwd;
-      },
-      error => {
-        console.log(JSON.stringify(error));
-      },
-    );
-  });
-  return user;
-};
 
 export const DELETE_TEMP = () => {
   DB.transaction(tx => {

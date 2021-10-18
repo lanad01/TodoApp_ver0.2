@@ -1,13 +1,7 @@
-import React, { useState, useEffect, Component } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import {  View,  Text,  StyleSheet,  TouchableOpacity,  } from 'react-native';
 import Modal from 'react-native-modal';
+import { DPW } from '../config/dp';
 
 const TwoButtonModal = (props) => {
   //two btn modal
@@ -18,7 +12,6 @@ const TwoButtonModal = (props) => {
       avoidKeyboard={true}
       transparent={true}
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <TouchableOpacity onPress={props.modalOff}>
         <View style={styles.outside}>
           <View style={styles.validModal}>
             <Text style={styles.validText}>{props.message}</Text>
@@ -38,7 +31,6 @@ const TwoButtonModal = (props) => {
             </View>
           </View>
         </View>
-      </TouchableOpacity>
     </Modal>
   );
 };
@@ -48,31 +40,28 @@ export default TwoButtonModal;
 const styles = StyleSheet.create({
   choicebox: {
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 30 * DPW,
   },
   outside: {
-    width: 400,
-    height: 700,
+    width: 800 * DPW,
+    height: 1400 * DPW,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1,
   },
   btn: {
     textAlign: 'center',
     fontFamily: 'BMJUA',
-    fontSize: 18,
+    fontSize: 36 * DPW,
     backgroundColor: 'white',
     borderRadius: 7,
     borderWidth: 5,
-    width: 120,
-    borderWidth: 5,
-    paddingTop: 10,
-    marginHorizontal: 13,
-    zIndex: 4,
+    width: 240 * DPW,
+    paddingTop: 20 * DPW,
+    marginHorizontal: 26 * DPW,
   },
   validModal: {
-    width: 300,
-    height: 150,
+    width: 600 * DPW,
+    height: 300 * DPW,
     backgroundColor: 'white',
     borderRadius: 10,
     borderColor: '#E0ffff',
@@ -80,12 +69,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 19,
-    zIndex: 3,
   },
   validText: {
     fontFamily: 'BMJUA',
-    fontSize: 23,
+    fontSize: 46 * DPW,
     textAlign: 'center',
-    width: 220,
+    width: 440 * DPW,
   },
 });

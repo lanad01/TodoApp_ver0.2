@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { MIDNIGHT_BLUE } from '../../config/color';
 import { DPW } from '../../config/dp';
 export const styles = StyleSheet.create({
   logoutBtn: {
@@ -7,7 +8,7 @@ export const styles = StyleSheet.create({
     color: 'white',
   },
   btnView: {
-    backgroundColor: '#191970',
+    backgroundColor: MIDNIGHT_BLUE,
     width: 160 * DPW,
     height: 60 * DPW,
     justifyContent: 'center',

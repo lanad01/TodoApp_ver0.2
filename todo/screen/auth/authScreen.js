@@ -60,7 +60,7 @@ export const AuthScreen = props => {
             style={styles.kakaoLogin}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => DELETE_TEMP()}>
+        {/* <TouchableOpacity onPress={() => DELETE_TEMP()}>
           <Image
             source={require('../../assets/images/kakao_login_medium_wide.png')}
             style={{
@@ -70,7 +70,7 @@ export const AuthScreen = props => {
               resizeMode: 'contain',
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <OneButtonModal

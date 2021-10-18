@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-shadow-cards';
 import Animated, {  useAnimatedStyle,  useSharedValue,  withTiming,withRepeat } from 'react-native-reanimated';
 
-import { styles } from '../screen/tab/task/style/taskListStyle';
+import { styles } from '../tab/task/style/taskListStyle'; 
 
 export const GuideModal = props => {
   const offset = useSharedValue(0);

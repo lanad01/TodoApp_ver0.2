@@ -1,21 +1,21 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, Text, TouchableOpacity, BackHandler } from 'react-native';
+import { Image, Text, TouchableOpacity } from 'react-native';
 
-import { styles } from './styles/tabsScreenStyle';
+import { styles } from '../../styles/tabRootStyle';
 import { ProfileRoot } from './profileRoot';
-import { TodoContext } from '../context/todoContext';
-import { AuthContext } from '../context/authcontext';
+import { TodoContext } from '../../../context/todoContext';
+import { AuthContext } from '../../../context/authcontext';
 import {
   CREATE_TASK_TABLE,
   GET_BADGE_VALUE,
-} from '../sqliteConnection/taskTableConnection';
-import { AUTO_LOGIN_PUSH_ALARM } from '../pushAlarm';
-import LogOutModal from '../modal/LogOutModal';
+} from '../../../sqliteConnection/taskTableConnection';
+import { AUTO_LOGIN_PUSH_ALARM } from '../../../pushAlarms/pushAlarm';
+import LogOutModal from '../../../screen/modal/LogOutModal';
 import { useNavigation } from '@react-navigation/core';
-import { TaskScreen_Data } from '../screen/tab/task/data/taskScreen_data';
-import Calendar from '../screen/tab/calendar/calendar';
-import { LIGNT_CYAN } from '../config/color';
+import { TaskScreen_Data } from '../../../screen/tab/task/data/taskScreen_data';
+import { LIGNT_CYAN } from '../../../config/color';
+import Calendar_Data from '../../../screen/tab/calendar/calendar_data';
 export const TabRoot = props => {
   console.log('TabRoot ');
   const navigation = useNavigation();
@@ -52,6 +52,8 @@ export const TabRoot = props => {
 
   const logoutImple = () => {
     setLogoutModal(false);
+    todoContext.taskInfo=[]
+
     props.navigation.navigate('Auth');
   };
 
@@ -81,7 +83,7 @@ export const TabRoot = props => {
       tabBarIcon: ({}) => {
         return (
           <Image
-            source={require('../assets/images/profileIcon.png')}
+            source={require('../../../assets/images/profileIcon.png')}
             style={styles.tabbarIcon}
           />
         );
@@ -101,7 +103,7 @@ export const TabRoot = props => {
       tabBarIcon: ({}) => {
         return (
           <Image
-            source={require('../assets/images/128x128.png')}
+            source={require('../../../assets/images/128x128.png')}
             style={styles.tabbarIcon}
           />
         );
@@ -119,7 +121,7 @@ export const TabRoot = props => {
       tabBarIcon: ({}) => {
         return (
           <Image
-            source={require('../assets/images/calendar-icon.png')}
+            source={require('../../../assets/images/calendar-icon.png')}
             style={styles.tabbarIcon}
           />
         );
@@ -148,7 +150,7 @@ export const TabRoot = props => {
         />
         <Tabs.Screen
           name="Calendar"
-          component={Calendar}
+          component={Calendar_Data}
           options={calnerdarScreen_opt}
         />
       </Tabs.Navigator>

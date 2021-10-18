@@ -1,14 +1,7 @@
-import React, { useState, useEffect, Component } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import {  View,  Text,  StyleSheet,  TouchableOpacity,   } from 'react-native';
 import Modal from 'react-native-modal';
-
+import { DPW } from '../config/dp';
 const OneButtonModal = props => {
 
   return (
@@ -39,11 +32,11 @@ export default OneButtonModal
 const styles = StyleSheet.create({
   choicebox: {
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 30 * DPW,
   },
   outside: {
-    width: 400,
-    height: 700,
+    width: 800 * DPW,
+    height: 1400 * DPW,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1,
@@ -51,35 +44,29 @@ const styles = StyleSheet.create({
   photochoose: {
     textAlign: 'center',
     fontFamily: 'BMJUA',
-    fontSize: 23,
+    fontSize: 46 * DPW,
     backgroundColor: 'white',
     borderRadius: 7,
     borderWidth: 5,
-    width: 150,
+    width: 300 * DPW,
     borderWidth: 5,
-    paddingTop: 10,
+    paddingTop: 20 * DPW,
     zIndex: 4,
   },
   validModal: {
-    width: 300,
-    height: 150,
+    width: 600 * DPW,
+    height: 300 * DPW,
     backgroundColor: 'white',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowOffset: {
-      width: 0,
-      height: 9,
-    },
-    shadowColor: '#191970',
-    shadowRadius: 12.35,
-    elevation: 19,
     zIndex: 3,
   },
   validText: {
     fontFamily: 'BMJUA',
-    fontSize: 18,
+    fontSize: 36 * DPW,
     textAlign: 'center',
-    width: 190,
+    elevation: 19,
+    width: 380 * DPW,
   },
 });

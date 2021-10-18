@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { MIDNIGHT_BLUE } from '../../../../config/color';
 import { DPW, WIDTH } from '../../../../config/dp';
 export const styles = StyleSheet.create({
   container: {},
@@ -10,21 +11,21 @@ export const styles = StyleSheet.create({
   headerText: {
     fontFamily: 'BMJUA',
     fontSize: 70 * DPW,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
   },
   detailText: {
     marginTop: 60 * DPW,
     fontFamily: 'BMJUA',
     fontSize: 44 * DPW,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
   },
   input: {
     paddingLeft: 20 * DPW,
     fontSize: 36 * DPW,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
   },
   editBox: {
-    backgroundColor: '#191970',
+    backgroundColor: MIDNIGHT_BLUE,
     margin: 50 * DPW,
     height: 80 * DPW,
     width: 200 * DPW,
@@ -42,7 +43,7 @@ export const styles = StyleSheet.create({
     marginLeft: 5,
   },
   underLine: {
-    backgroundColor: '#191970',
+    backgroundColor: MIDNIGHT_BLUE,
     height: 6 * DPW,
     width: 460 * DPW,
     marginLeft: 16 * DPW,

@@ -1,11 +1,13 @@
 import { StyleSheet } from "react-native";
+import { MIDNIGHT_BLUE } from "../../../../config/color";
 import { DPW, WIDTH } from '../../../../config/dp';
 
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
       alignItems: 'center',
-      backgroundColor: '#191970',
+      backgroundColor: MIDNIGHT_BLUE,
+      
     },
     headerText: {
       fontFamily: 'BMJUA',
@@ -21,9 +23,9 @@ export const styles = StyleSheet.create({
     },
     emailText: {
       fontFamily: 'BMJUA',
-      fontSize: 28 * DPW,
+      fontSize: 30 * DPW,
       color: 'gray',
-      marginTop: 2 * DPW,
+      marginTop: 5 * DPW,
     },
     overlap: {
       marginTop: 10 * DPW,
@@ -44,14 +46,14 @@ export const styles = StyleSheet.create({
       alignItems: 'center',
       alignSelf: 'center',
       borderRadius: 100,
-      marginTop: 40 * DPW,
+      marginTop: 20 * DPW,
       position: 'absolute',
     },
     profileImage:{
       borderRadius: 70,
-      width: 200 * DPW,
-      height: 200 * DPW,
-      borderColor: '#191970',
+      width: 250 * DPW,
+      height: 250 * DPW,
+      borderColor: MIDNIGHT_BLUE,
       borderWidth: 5,
     },
     editBox:{
@@ -59,9 +61,9 @@ export const styles = StyleSheet.create({
     },
     editText:{
       fontFamily: 'BMJUA',
-      color: '#191970',
+      color: MIDNIGHT_BLUE,
       fontSize: 37 * DPW,
-      marginTop:15 * DPW,
+      marginTop:22 * DPW,
       marginRight:10 * DPW,
     },
     bottom: {

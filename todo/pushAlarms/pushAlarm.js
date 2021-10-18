@@ -22,13 +22,15 @@ export const AUTO_LOGIN_PUSH_ALARM = (authContext, number_of_task) => {
 
 export const BACKGROUND_ALARM_ABOUT_TO_EXPIRED_DATE = number_of_task_about_exp => {
     console.log('NUMBER' + number_of_task_about_exp);
+    PushNotification.cancelAllLocalNotifications(); //기존의 메시지는 모두 삭제한다
     PushNotification.localNotificationSchedule({
-      channelId: 'test-channel',
+      channelId: 'test-channel', // route에서 만든 channelId와 동기화해야한다.
       title: '기한임박인 Task가 있습니다.',
       message: '총 '+number_of_task_about_exp+"개",
       date: new Date(Date.now() + 10 * 1000), // 푸쉬가 되는 시간 : 10초후
       repeatType: 'day', //1분마다 알람이 간다
       allowWhileIdle: true,
+      ignoreInForeground: false, //active 상태일 경우 무시한다
       showWhen: true, //시간 표시 true
       timeoutAfter:600 * 1000, // 푸쉬 time out 600초
       color: 'red',

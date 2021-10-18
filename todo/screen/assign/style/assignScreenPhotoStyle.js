@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { MIDNIGHT_BLUE, PALETUR } from '../../../config/color';
 import { DPW } from '../../../config/dp';
 export const styles = StyleSheet.create({
   scrollContainer: {
@@ -13,7 +14,7 @@ export const styles = StyleSheet.create({
   headerText: {
     fontFamily: 'BMJUA',
     fontSize: 48 *DPW,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     marginTop: 60 *DPW,
     marginLeft: 40 *DPW,
   },
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     fontFamily: 'BMJUA',
     fontSize: 45 *DPW,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     paddingLeft: 17 *DPW,
     marginTop: 80 *DPW,
   },
@@ -63,12 +64,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     fontFamily: 'BMJUA',
     fontSize: 60 *DPW,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     marginTop: 10 *DPW,
     paddingTop: 14 *DPW,
     paddingLeft:10 *DPW,
     borderWidth: 5,
-    borderColor: '#191970',
+    borderColor: MIDNIGHT_BLUE,
     borderRadius: 30,
   },
   choicebox: {
@@ -84,7 +85,7 @@ export const styles = StyleSheet.create({
     borderWidth:5,
     width: 500 *DPW,
     height: 100 *DPW,
-    borderColor: '#AEEEEE',
+    borderColor: PALETUR,
     paddingTop: 20 *DPW,
   },
 });

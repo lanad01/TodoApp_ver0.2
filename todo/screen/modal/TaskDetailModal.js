@@ -1,27 +1,22 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native';
+import React from 'react';
+import {  View,  Text,  TouchableOpacity,  TextInput,  } from 'react-native';
 import Modal from 'react-native-modal';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-date-picker';
-import { TodoContext } from '../context/todoContext';
-import { UPDATE_TASK, SELECT_TASK_BY_TASKNO } from '../sqliteConnection/taskTableConnection';
+
+import { TodoContext } from '../../context/todoContext';
+import { UPDATE_TASK, SELECT_TASK_BY_TASKNO } from '../../sqliteConnection/taskTableConnection';
 import { styles } from './styles/taskDetailModalStyle';
 
 export const TaskDetailModal = props => {
-  const todoContext = useContext(TodoContext);
-  const [taskName, setTaskName] = useState(''); // 수정 modal창에서 작성된 task이름
-  const [taskPrior, setPrior] = useState(''); // 수정 modal차엥서 작성된 우선순위
-  const [exp, setExp] = useState(new Date()); // 수정 modal창에서 작성된 기한
-  const [open, setOpen] = useState(false); // 달력 모달 오픈
-  const [dateToKorean, setDateToKorean] = useState(); //기한변경 옆 TEXTINPUT
+  const todoContext = React.useContext(TodoContext);
+  const [taskName, setTaskName] = React.useState(''); // 수정 modal창에서 작성된 task이름
+  const [taskPrior, setPrior] = React.useState(''); // 수정 modal차엥서 작성된 우선순위
+  const [exp, setExp] = React.useState(new Date()); // 수정 modal창에서 작성된 기한
+  const [open, setOpen] = React.useState(false); // 달력 모달 오픈
+  const [dateToKorean, setDateToKorean] = React.useState(); //기한변경 옆 TEXTINPUT
 
-  useEffect(async () => {
+  React.useEffect(async () => {
     // TaskDetailModal Mount시 실행되는 task_no를 통한 데이터 조회
     const task_from_db = await SELECT_TASK_BY_TASKNO(props.task_no);
     setTaskName(task_from_db.task_name); //Detail 모달에서 출력되는 taskName칸을 DB에서 받아온 값으로 대체

@@ -4,8 +4,6 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import {
-  KakaoOAuthToken,
-  KakaoProfile,
   getProfile as getKakaoProfile,
   login,
   logout,

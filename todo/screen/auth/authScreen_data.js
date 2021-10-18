@@ -40,7 +40,7 @@ export const AuthDataHandle = ({navigation}) => {
     //자동 로그인
     autoLogin = async () => {
       try {
-        const user_no = await AsyncStorage.getItem('user_no');
+        const user_no = await AsyncStorage.getItem('user_no'); //Async user_no가 존재한다면 가져온다
         if (user_no != null) {
           //Async에 남아있는 user_no가 있는 경우
           console.log('AuthScreen / AutoLogin / Async Value :' + user_no);
@@ -85,7 +85,7 @@ export const AuthDataHandle = ({navigation}) => {
             getUser_no();
           } else if (dupCount == 0) {
             // 최종일치 Failed = VALIDATION FAILED
-            console.log('pwd and inputpwd not matched');
+            console.log('AuthScreen / pwd and inputpwd not matched');
             setModalData({loginUnmatchedModal : true})
           }
         }

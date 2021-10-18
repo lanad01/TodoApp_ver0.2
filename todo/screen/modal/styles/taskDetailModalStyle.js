@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { DPW } from '../../config/dp';
+import { MIDNIGHT_BLUE, PALETUR } from '../../../config/color';
+import { DPW } from '../../../config/dp';
 export const styles = StyleSheet.create({
   modal: {
     justifyContent: 'center',
@@ -14,7 +15,7 @@ export const styles = StyleSheet.create({
     height: 600 * DPW,
     backgroundColor: 'white',
     borderRadius: 10 ,
-    borderColor: '#AEEEEE',
+    borderColor: PALETUR,
     borderWidth: 9,
     justifyContent: 'center',
     alignItems: 'center',
@@ -24,7 +25,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'BMJUA',
     fontSize: 40 * DPW,
     color: 'white',
-    backgroundColor: '#191970',
+    backgroundColor: MIDNIGHT_BLUE,
     borderRadius: 7,
     width: 200 * DPW,
     paddingTop: 10 * DPW, 
@@ -37,17 +38,17 @@ export const styles = StyleSheet.create({
   },
   validText: {
     fontFamily: 'BMJUA',
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 36 * DPW,
   },
   pickerView: {
-    borderColor: '#191970',
+    borderColor: MIDNIGHT_BLUE,
     borderRadius: 5 ,
     borderWidth: 3,
   },
   priorText: {
     fontFamily: 'BMJUA',
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 36 * DPW,
     paddingTop: 40 * DPW,
     marginRight: 8 * DPW,
@@ -62,7 +63,7 @@ export const styles = StyleSheet.create({
     marginLeft: 10 * DPW,
     borderRadius: 6,
     borderWidth: 3,
-    borderColor: '#191970',
+    borderColor: MIDNIGHT_BLUE,
   },
   picker: {
     width: 250 * DPW,
@@ -79,13 +80,13 @@ export const styles = StyleSheet.create({
   }, 
   pickedData: {
     fontFamily: 'BMJUA',
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 30 * DPW,
     bottom: 20 * DPW,
     marginLeft: 24 * DPW,
   },
   datePickerView: {
-    backgroundColor: '#191970',
+    backgroundColor: MIDNIGHT_BLUE,
     width: 200 * DPW,
     height: 60 * DPW,
     borderRadius:10,

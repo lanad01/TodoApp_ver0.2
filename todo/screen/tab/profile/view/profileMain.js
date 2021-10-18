@@ -1,8 +1,8 @@
 import React from 'react';
-import {  View,  Text,  Image,  TouchableOpacity,   } from 'react-native';
+import {  View,  Text,  Image,  TouchableOpacity, ImageBackground,   } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { AuthContext } from '../../../../context/authcontext';
-import { styles } from '../style/profileScreenStyle';
+import { styles } from '../style/profileMainStyle';
 import { HEIGHT } from '../../../../config/dp';
 
 export const ProfileMain = props  => {
@@ -35,7 +35,9 @@ export const ProfileMain = props  => {
               <Text style={styles.editText}> 프로필 수정 </Text>
             </TouchableOpacity>
           </View>
+          
         </View>
+        
         <View style={styles.bottom}>
           <View style={styles.detailContainer}>
             <Text style={styles.detailCategory}> * Register Date </Text>
@@ -55,6 +57,7 @@ export const ProfileMain = props  => {
           </View>
         </View>
       </View>
+      
     </GestureRecognizer>
   );
 };

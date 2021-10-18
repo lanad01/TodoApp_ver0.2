@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { MIDNIGHT_BLUE } from '../../../../config/color';
 import { DPW, WIDTH } from '../../../../config/dp';
 
 export const styles = StyleSheet.create({
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
   input: {
     width: 600 * DPW,
     fontFamily: 'BMJUA',
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 40 * DPW,
     paddingLeft: 10,
   },
@@ -47,16 +48,16 @@ export const styles = StyleSheet.create({
   },
   pwdChangeText: {
     fontFamily: 'BMJUA',
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 23,
   },
   editBox: {
-    backgroundColor: '#191970',
+    backgroundColor: MIDNIGHT_BLUE,
     marginTop: 30 * DPW,
     marginLeft: 30 * DPW,
     height: 80 * DPW,
     width: 200 * DPW,
-    borderColor: '#191970',
+    borderColor: MIDNIGHT_BLUE,
     borderWidth: 3,
   },
   editText: {
@@ -79,7 +80,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     width: 490 * DPW,
     height: 120 * DPW,
-    borderColor: '#191970',
+    borderColor: MIDNIGHT_BLUE,
     borderWidth: 5,
     paddingTop: 25 * DPW,
     elevation: 18,
@@ -90,8 +91,7 @@ export const styles = StyleSheet.create({
     marginTop: 40 * DPW,
     borderRadius: 100,
     borderWidth: 8,
-    borderColor: 'powderblue',
-    
+    borderColor: MIDNIGHT_BLUE,
   },
   backBtnView: {
     flexDirection: 'row',
@@ -105,7 +105,7 @@ export const styles = StyleSheet.create({
     marginLeft: 15 * DPW,
   },
   backSide: {
-    backgroundColor: '#191970',
+    backgroundColor: MIDNIGHT_BLUE,
     height: 20 * DPW,
     width: WIDTH,
   },

@@ -2,19 +2,19 @@ import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ID_DUPLICATION_CHECK } from '../../../sqliteConnection/userTableConnection';
 import OneButtonModal from '../../../modal/OneButtonModal';
-import AssignScreen_1st from '../view/assignScreen_1st';
+import AssignScreen_1st from '../view/assign_1st';
 
 export default Assign_1st_data = ({ navigation }) => {
-  const idRef = useRef(); // useRefsms Dom을 부른다
-  const pwdRef = useRef();
+  const idRef = React.useRef(); // useRefsms Dom을 부른다
+  const pwdRef = React.useRef();
 
-  const [id, setId] = useState(null);
-  const [pwd, setPwd] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [job, setJob] = useState(null);
-  const [idNNMessage, setIdNNMessage] = useState();
-  const [dupIdError, setDupIdError] = useState(false);
-  const [pwdNNMsg, setPwdNNMsg] = useState();
+  const [id, setId] = React.useState(null);
+  const [pwd, setPwd] = React.useState(null);
+  const [email, setEmail] = React.useState(null);
+  const [job, setJob] = React.useState(null);
+  const [idNNMessage, setIdNNMessage] = React.useState();
+  const [dupIdError, setDupIdError] = React.useState(false);
+  const [pwdNNMsg, setPwdNNMsg] = React.useState();
 
   const patchInfo = (type, value) => {
     if (type == 'id') { setId(value) }

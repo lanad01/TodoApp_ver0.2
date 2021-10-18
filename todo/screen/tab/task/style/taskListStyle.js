@@ -1,4 +1,10 @@
 import { StyleSheet } from 'react-native';
+import {
+  GAINSBORO,
+  LIGHT_SALMON,
+  MIDNIGHT_BLUE,
+  PALETUR,
+} from '../../../../config/color';
 import { DPW } from '../../../../config/dp';
 export const styles = StyleSheet.create({
   container: {
@@ -8,7 +14,7 @@ export const styles = StyleSheet.create({
   backTextWhite: {
     width: 130 * DPW,
     fontSize: 40 * DPW,
-    color: '#FFF',
+    color: 'white',
     fontWeight: 'bold',
     marginTop: -50 * DPW,
   },
@@ -20,7 +26,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     marginHorizontal: 20 * DPW,
-    
+  },
+  rowFront_expired: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    marginHorizontal: 20 * DPW,
   },
   card: {
     shadowOpacity: 0.5,
@@ -30,9 +41,8 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 10 * DPW,
     marginBottom: 15 * DPW,
-
   },
-  card_perfomed:{
+  card_perfomed: {
     shadowOpacity: 0.5,
     elevation: 7,
     height: 180 * DPW,
@@ -40,12 +50,22 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 10 * DPW,
     marginBottom: 15 * DPW,
-    backgroundColor:'#DCDCDC',
+    backgroundColor: GAINSBORO,
+  },
+  card_expired: {
+    shadowOpacity: 0.5,
+    elevation: 7,
+    height: 180 * DPW,
+    width: 550 * DPW,
+    alignSelf: 'center',
+    marginTop: 10 * DPW,
+    marginBottom: 15 * DPW,
+    backgroundColor: '#FFFFE0',
   },
   rowBack: {
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: 'red',
+    backgroundColor: LIGHT_SALMON,
     height: 180 * DPW,
     width: 550 * DPW,
     borderRadius: 15,
@@ -60,17 +80,31 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 180 * DPW,
   },
+  taskCont_expired: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    height: 180 * DPW,
+    opacity: 0.25,
+  },
+  taskCont_not_expired_text: {
+    position: 'absolute',
+    fontSize: 75 * DPW,
+    left: 20 * DPW,
+    fontFamily: 'BMJUA',
+    top: 60 * DPW,
+  },
   task1st: {
     flexDirection: 'row',
   },
-  task2nd:{
+  task2nd: {
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 10,
   },
   taskName: {
     fontFamily: 'BMJUA',
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 44 * DPW,
     width: 260 * DPW,
     marginRight: 40 * DPW,
@@ -78,7 +112,7 @@ export const styles = StyleSheet.create({
 
   taskPrior: {
     fontFamily: 'BMJUA',
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 42 * DPW,
   },
   taskExp: {
@@ -87,24 +121,24 @@ export const styles = StyleSheet.create({
     fontSize: 30 * DPW,
     justifyContent: 'center',
     alignSelf: 'flex-start',
-    top:8 * DPW,
+    top: 8 * DPW,
     marginTop: 20 * DPW,
   },
-  completeBtnView:{
-     marginLeft: 20 * DPW,
-      marginTop: 12 * DPW 
+  completeBtnView: {
+    marginLeft: 20 * DPW,
+    marginTop: 12 * DPW,
   },
-  completeTextView:{
+  completeTextView: {
     width: 55,
     height: 30,
     textAlign: 'center',
-    fontFamily:'BMJUA',
-    borderColor:'black',
-    borderWidth:5,
-    borderRadius:7,
-    backgroundColor:'black',
-    color:'white',
-    paddingTop:7
+    fontFamily: 'BMJUA',
+    borderColor: 'black',
+    borderWidth: 5,
+    borderRadius: 7,
+    backgroundColor: 'black',
+    color: 'white',
+    paddingTop: 7,
   },
   backRightBtn: {
     alignItems: 'center',
@@ -113,26 +147,26 @@ export const styles = StyleSheet.create({
     borderRadius: 15,
   },
   backRightBtnRight: {
-    backgroundColor: 'red',
+    backgroundColor: LIGHT_SALMON,
     height: 160 * DPW,
     right: 10 * DPW,
   },
   separator: {
     height: 15 * DPW,
-    backgroundColor: '#AFEEEE',
+    backgroundColor: PALETUR,
     width: 550 * DPW,
     borderRadius: 9,
     alignSelf: 'center',
   },
   underLine: {
     height: 20 * DPW,
-    backgroundColor: '#AFEEEE',
+    backgroundColor: PALETUR,
     width: '100%',
     alignSelf: 'center',
   },
   bottomLine: {
     height: 20 * DPW,
-    backgroundColor: '#AFEEEE',
+    backgroundColor: PALETUR,
     width: '100%',
     bottom: 0,
     position: 'absolute',
@@ -140,7 +174,7 @@ export const styles = StyleSheet.create({
   noTaskText: {
     marginTop: 200 * DPW,
     fontFamily: 'BMJUA',
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 66 * DPW,
   },
   noTaskImg: {
@@ -172,7 +206,7 @@ export const styles = StyleSheet.create({
   rowBackForGuide: {
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: 'red',
+    backgroundColor: LIGHT_SALMON,
     height: 160 * DPW,
     width: 550 * DPW,
     borderRadius: 15,

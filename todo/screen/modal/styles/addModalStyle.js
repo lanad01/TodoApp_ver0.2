@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { DPW } from '../../config/dp';
+import { PALETUR } from '../../../config/color';
+import { DPW } from '../../../config/dp';
 
 export const styles = StyleSheet.create({
   modal: {
@@ -12,7 +13,7 @@ export const styles = StyleSheet.create({
     zIndex: 1,
     borderWidth: 3,
     borderRadius: 13,
-    borderColor: '#AFEEEE',
+    borderColor: PALETUR,
   },
   validModal: {
     width: 600 * DPW,
@@ -53,7 +54,7 @@ export const styles = StyleSheet.create({
     height: 90 * DPW,
     bottom: 20 * DPW,
     paddingLeft: 20 * DPW,
-    backgroundColor: '#AFEEEE',
+    backgroundColor: PALETUR,
     borderRadius: 7,
     fontFamily: 'BMJUA',
   },
@@ -64,12 +65,12 @@ export const styles = StyleSheet.create({
   picker: {
     width: 320 * DPW,
     height: 100 * DPW,
-    backgroundColor: '#AFEEEE',
+    backgroundColor: PALETUR,
     marginLeft: 10 * DPW,
     marginBottom: 20 * DPW,
   },
   opacity: {
-    backgroundColor: '#afeeee',
+    backgroundColor: PALETUR,
     borderWidth: 4,
     borderColor: 'white',
     marginLeft: 10 * DPW,
@@ -88,14 +89,14 @@ export const styles = StyleSheet.create({
     marginTop: 10 * DPW,
   },
   expInput: {
-    backgroundColor: '#afeeee',
+    backgroundColor: PALETUR,
     marginLeft: 20 * DPW,
     width: 320 * DPW,
     height: 80 * DPW,
     borderRadius: 5,
     fontFamily: 'BMJUA',
     fontSize: 28 * DPW,
-    color: '#191970',
+    color: 'black',
     paddingLeft: 22 * DPW,
   },
   choicebox: {

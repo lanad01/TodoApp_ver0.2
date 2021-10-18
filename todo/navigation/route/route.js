@@ -4,12 +4,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
 import messaging from '@react-native-firebase/messaging';
 
-import { AuthContext } from '../context/authcontext';
-import { TabRoot } from './tabRoot';
-import { AssignRoot } from './assignRoot';
-import { AuthScreen, authScreen, AuthDataHandle } from '../screen/auth/authScreen_data';
-import { CHECK_EXP_OF_TASKS } from '../sqliteConnection/taskTableConnection';
-import { CREATE_USER_TABLE } from '../sqliteConnection/userTableConnection';
+import { AuthContext } from '../../context/authcontext';
+import { TabRoot } from './navigator/tabRoot';
+import { AssignRoot } from './navigator/assignRoot';
+import { AuthDataHandle } from '../../screen/auth/authScreen_data';
+import { CHECK_EXP_OF_TASKS } from '../../sqliteConnection/taskTableConnection';
+import { CREATE_USER_TABLE } from '../../sqliteConnection/userTableConnection';
 import { Alert, AppState } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -29,7 +29,6 @@ export default () => {
   //AsyncStorage에 로그인된 기록이 있는 유저의 Task row에서
   //기한이 하루 이하로 남은 row가 있을 경우 푸쉬알람 설정
   const pushNoti_background = async () => {
-    console.log('Appstate Change :' + AppState.currentState);
     if (AppState.currentState == 'background') {
       const user_no=await AsyncStorage.getItem('user_no') //왜 await를 붙여야하는지는 차후 이야기합시다
       CHECK_EXP_OF_TASKS(user_no)

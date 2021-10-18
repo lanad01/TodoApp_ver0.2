@@ -1,23 +1,24 @@
 import { StyleSheet } from 'react-native';
+import { MIDNIGHT_BLUE } from '../../../config/color';
 import { DPW } from '../../../config/dp';
 export const styles = StyleSheet.create({
   container: {
     height: 1400 * DPW,
-    backgroundColor: '#191970',
+    backgroundColor:MIDNIGHT_BLUE,
     justifyContent: 'center',
     alignItems:'center'
   },
   headerText: {
     fontFamily: 'BMJUA',
     fontSize: 62 * DPW,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     marginLeft: 20 * DPW,
     marginBottom: 40 * DPW,
   },
   headerDetailText: {
     fontFamily: 'BMJUA',
     fontSize: 36 * DPW,
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     marginLeft: 30 * DPW,
     marginBottom: 40 * DPW,
   },
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
   },
   category: {
     fontFamily: 'BMJUA',
-    color: '#191970',
+    color: MIDNIGHT_BLUE,
     fontSize: 50 * DPW,
     left: 20 * DPW,
   },
@@ -47,7 +48,7 @@ export const styles = StyleSheet.create({
     height: 100 * DPW,
     width: 520 * DPW,
     backgroundColor: 'white',
-    borderColor: '#191970',
+    borderColor:MIDNIGHT_BLUE,
     borderWidth: 5,
     borderRadius: 8,
     borderBottomWidth: 1,
@@ -59,7 +60,7 @@ export const styles = StyleSheet.create({
     height: 100 * DPW,
     width: 520 * DPW,
     backgroundColor: 'white',
-    borderColor: '#191970',
+    borderColor: MIDNIGHT_BLUE,
     borderWidth: 5,
     borderRadius: 8,
     borderBottomWidth: 1,

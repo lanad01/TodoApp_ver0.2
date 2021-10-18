@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import Assign_1st_data from '../screen/assign/data/assign_1st_data';
-import Assign_2nd_data from '../screen/assign/data/assign_2nd_data';
+import Assign_1st_data from '../../../screen/assign/data/assign_1st_data'
+import Assign_2nd_data from '../../../screen/assign/data/assign_2nd_data';
 
 const AssignStack= createStackNavigator();
 export const AssignRoot= () => {

@@ -21,7 +21,7 @@ const ProfileEdit = (props) => {
         <TouchableOpacity
           onPress={props.setProfileModal}
           style={styles.cameraImg}>
-          <Image source={require('../../../../assets/images/cameraEidt.png')} style={{}} />
+          <Image source={require('../../../../assets/images/cameraEidt.png')}/>
         </TouchableOpacity>
       </View>
 

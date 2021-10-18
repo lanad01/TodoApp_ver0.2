@@ -1,8 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { } from 'react';
-import { ProfileEdit_Data } from '../screen/tab/profile/data/profileEdit_data';
-import { ProfileMain_Data } from '../screen/tab/profile/data/profileMain_data';
-import { ProfileResetPwd_Data } from '../screen/tab/profile/data/profileResetPwd_data';
+import { ProfileMain_Data} from '../../../screen/tab/profile/data/profileMain_data'
+import { ProfileEdit_Data} from '../../../screen/tab/profile/data/profileEdit_data'
+import { ProfileResetPwd_Data } from '../../../screen/tab/profile/data/profileResetPwd_data';
 export const ProfileRoot = () => {
   const ProfileStack = createStackNavigator();
   return (

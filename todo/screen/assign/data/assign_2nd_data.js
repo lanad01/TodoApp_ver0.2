@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import {
   View,
   Keyboard,
@@ -10,20 +10,20 @@ import {
   SELECT_USER_INFO_BY_ID,
   INSERT_USER,
 } from '../../../sqliteConnection/userTableConnection';
-import { ProfileChooseModal } from '../../../modal/ProfileChooseModal';
-import AssignScreen_2nd from '../view/assignScreen_2nd';
+import { ProfileChooseModal } from '../../../screen/modal/ProfileChooseModal';
+import AssignScreen_2nd from '../view/assign_2nd';
 
 export default Assign_2nd_data = ({ route, navigation }) => {
   console.log('Assign 2nd');
-  const authContext = useContext(AuthContext);
-  const nameRef = useRef(); // 유저네임 Null일 경우 focus용
+  const authContext = React.useContext(AuthContext);
+  const nameRef = React.useRef(); // 유저네임 Null일 경우 focus용
 
   const { id, pwd, job, email } = route.params; // assignScreen에서 작성된 유저 정보
-  const [pictureSelected, setPicture] = useState(false); // 프로필 사진이 지정되었는지 안되었는지 여부
-  const [profileImage, setProfileImage] = useState(null); // 프로필 사진 image.path
-  const [profileChooseModal, setProfileChooseModal] = useState(false); // 프로필 사진 지정 방법 모달
-  const [name, setName] = useState(null); // 유저네임
-  const [nameIsNull, setNameIsNN] = useState(false); // 유저네임 Null 메시지
+  const [pictureSelected, setPicture] = React.useState(false); // 프로필 사진이 지정되었는지 안되었는지 여부
+  const [profileImage, setProfileImage] = React.useState(null); // 프로필 사진 image.path
+  const [profileChooseModal, setProfileChooseModal] = React.useState(false); // 프로필 사진 지정 방법 모달
+  const [name, setName] = React.useState(null); // 유저네임
+  const [nameIsNull, setNameIsNN] = React.useState(false); // 유저네임 Null 메시지
   // 최종 Insert
   const finalize = async () => {
     if (name === null) {

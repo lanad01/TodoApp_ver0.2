@@ -1,17 +1,18 @@
-import React, { useState, useEffect, Component } from 'react';
+import React from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  Button,
-  TextInput,
   TouchableOpacity,
 } from 'react-native';
 import { logout, unlink } from '@react-native-seoul/kakao-login';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
-import { AuthContext } from '../context/authcontext';
+
+import { AuthContext } from '../../context/authcontext';
+import { DPW } from '../../config/dp'
+import { LIGNT_CYAN } from '../../config/color';
 
 const LogOutModal = (props) => {
   //two btn modal
@@ -54,7 +55,6 @@ const LogOutModal = (props) => {
       avoidKeyboard={true}
       transparent={true}
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <TouchableOpacity onPress={props.modalOff}>
         <View style={styles.outside}>
           <View style={styles.validModal}>
             <Text style={styles.validText}>{props.message}</Text>
@@ -74,7 +74,6 @@ const LogOutModal = (props) => {
             </View>
           </View>
         </View>
-      </TouchableOpacity>
     </Modal>
   );
 };
@@ -84,44 +83,37 @@ export default LogOutModal;
 const styles = StyleSheet.create({
   choicebox: {
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 30 * DPW,
   },
   outside: {
-    width: 400,
-    height: 700,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1,
   },
   btn: {
     textAlign: 'center',
+    textAlignVertical:'center',
     fontFamily: 'BMJUA',
-    fontSize: 18,
+    fontSize: 36 * DPW,
     backgroundColor: 'white',
     borderRadius: 7,
     borderWidth: 5,
-    width: 120,
-    borderWidth: 5,
-    paddingTop: 10,
-    marginHorizontal: 13,
-    zIndex: 4,
+    padding: 15 * DPW,
+    marginHorizontal: 13 * DPW,
   },
   validModal: {
-    width: 300,
-    height: 150,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    borderColor: '#E0ffff',
-    borderWidth: 9,
+    width: 600 * DPW,
+    height: 300 * DPW,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 19,
-    zIndex: 3,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderColor: LIGNT_CYAN,
+    borderWidth: 9,
   },
   validText: {
     fontFamily: 'BMJUA',
-    fontSize: 23,
+    fontSize: 46 * DPW,
     textAlign: 'center',
-    width: 220,
+    width: 440 * DPW,
   },
 });

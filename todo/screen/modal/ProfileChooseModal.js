@@ -1,15 +1,12 @@
-import React, { useRef, useState, useContext, useEffect } from 'react';
+import React from 'react';
 import {
   View,
-  Image,
   Text,
   TouchableOpacity,
-  TextInput,
-  Keyboard,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
-import { styles } from '../screen/assign/style/assignScreenPhotoStyle';
+import { styles } from '../assign/style/assignScreenPhotoStyle'
 
 export const ProfileChooseModal = props => {
     const cropPicker_Opt = () => {
