@@ -14,8 +14,8 @@ import {
 
 import {  DELETE_TEMP,} from '../../sqliteConnection/userTableConnection';
 import { styles } from './authScreenStyle';
-import { Loading } from '../../modal/Loading';
-import OneButtonModal from '../../modal/OneButtonModal';
+import { Loading } from '../../component/Loading';
+import OneButtonModal from '../../component/OneButtonModal';
 
 export const AuthScreen = props => {
   const [loading, setLoading] = React.useState(false)

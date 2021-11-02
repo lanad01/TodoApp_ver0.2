@@ -3,7 +3,7 @@ import {  Animated,  Dimensions,  View, } from 'react-native';
 
 import { GuideModal } from '../../../modal/GuideModal';
 import { TaskDetailModal } from '../../../modal/TaskDetailModal';
-import { Loading } from '../../../../modal/Loading';
+import { Loading } from '../../../../component/Loading';
 import { TodoContext } from '../../../../context/todoContext';
 import { AuthContext } from '../../../../context/authcontext';
 import { AddModal } from '../../../modal/AddModal';
@@ -45,7 +45,6 @@ export const TaskScreen_Data = ({ navigation }) => {
         todoContext.task_exp[i]=new Date(split[0], split[1]-1, split[2]).getTime()
         setList(); //애니메이션 용 배열 정보를 각 iteration마다 추가하는 메소드
       });
-      console.log("왜 없던게 "+JSON.stringify(todoContext.taskInfo))
     };
     setLoading(true);
     getTaskList() //async await 활용

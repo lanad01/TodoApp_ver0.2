@@ -14,11 +14,12 @@ import {
   SOCIAL_LOGIN,
 } from '../../sqliteConnection/userTableConnection';
 import { AuthScreen } from './authScreen';
-import { Loading } from '../../modal/Loading';
+import { Loading } from '../../component/Loading';
 import { View } from 'react-native';
 GoogleSignin.configure({}); //구글로그인 configure
 
 export const AuthDataHandle = ({navigation}) => {
+
     const authContext = React.useContext(AuthContext);
     const [loading, setLoading] = React.useState(false); //로딩화면은 딱히 안보내도 될 것 같다
 

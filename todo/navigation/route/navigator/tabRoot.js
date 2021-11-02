@@ -16,6 +16,8 @@ import { useNavigation } from '@react-navigation/core';
 import { TaskScreen_Data } from '../../../screen/tab/task/data/taskScreen_data';
 import { LIGNT_CYAN } from '../../../config/color';
 import Calendar_Data from '../../../screen/tab/calendar/calendar_data';
+import Chat from '../../../screen/tab/chat/chat';
+
 export const TabRoot = props => {
   console.log('TabRoot ');
   const navigation = useNavigation();
@@ -53,7 +55,6 @@ export const TabRoot = props => {
   const logoutImple = () => {
     setLogoutModal(false);
     todoContext.taskInfo=[]
-
     props.navigation.navigate('Auth');
   };
 
@@ -77,7 +78,6 @@ export const TabRoot = props => {
     return {
       tabBarActiveTintColor: '#00af9d',
       tabBarLabelStyle: styles.tabbarLabel,
-      headerStyle: { backgroundColor: '#E0ffff' },
       headerTitleStyle: styles.headerTitleStyle,
       headerRight: () => logoutBtn(),
       tabBarIcon: ({}) => {
@@ -98,7 +98,6 @@ export const TabRoot = props => {
       tabBarActiveTintColor: '#00af9d',
       tabBarLabelStyle: styles.tabbarLabel,
       headerTitleStyle: styles.headerTitleStyle,
-      headerStyle: { backgroundColor: LIGNT_CYAN },
       headerRight: () => logoutBtn(),
       tabBarIcon: ({}) => {
         return (
@@ -115,10 +114,10 @@ export const TabRoot = props => {
     return {
       tabBarActiveTintColor: '#00af9d',
       tabBarLabelStyle: styles.tabbarLabel,
-      headerStyle: { backgroundColor: LIGNT_CYAN },
       headerTitleStyle: styles.headerTitleStyle,
       headerRight: () => logoutBtn(),
-      tabBarIcon: ({}) => {
+      tabBarIcon: ({tintColor, focused}) => {
+        
         return (
           <Image
             source={require('../../../assets/images/calendar-icon.png')}
@@ -128,11 +127,29 @@ export const TabRoot = props => {
       },
     };
   };
+
+  const chattingScreen_opt = () => {
+    return {
+      tabBarActiveTintColor: '#00af9d',
+      tabBarLabelStyle: styles.tabbarLabel,
+      headerTitleStyle: styles.headerTitleStyle,
+      headerRight: () => logoutBtn(),
+      tabBarIcon: ({tintColor, focused}) => {
+        return (
+          <Image
+            source={require('../../../assets/images/chat.jpg')}
+            style={styles.tabbarIcon}
+          />
+        );
+      },
+    };
+  };
+
   const Tabs = createBottomTabNavigator();
   return (
     //컴포넌트화
     <TodoContext.Provider value={todoContext}>
-      <Tabs.Navigator initialRouteName="Profile">
+      <Tabs.Navigator initialRouteName="Chatting">
         <Tabs.Screen
           name="Profile"
           component={ProfileRoot}
@@ -152,6 +169,11 @@ export const TabRoot = props => {
           name="Calendar"
           component={Calendar_Data}
           options={calnerdarScreen_opt}
+        />
+        <Tabs.Screen
+          name="Chatting"
+          component={Chat}
+          options={chattingScreen_opt}
         />
       </Tabs.Navigator>
     </TodoContext.Provider>

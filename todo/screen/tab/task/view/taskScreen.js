@@ -1,11 +1,12 @@
 import React from 'react';
-import {  Animated,  Dimensions,  Text,  View,  PanResponder,  TouchableOpacity,  Image,  } from 'react-native';
+import {  Animated,  Dimensions,  Text,  View,  PanResponder,  TouchableOpacity,  Image, } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Card } from 'react-native-shadow-cards';
 import ActionButton from 'react-native-action-button';
 import { TodoContext } from '../../../../context/todoContext';
 import { DPW } from '../../../../config/dp';
 import { styles } from '../style/taskListStyle';
+import { BISQUE, LIGHT_SALMON } from '../../../../config/color';
 
 export const TaskScreen = props => {
   const todoContext = React.useContext(TodoContext);
@@ -47,10 +48,25 @@ export const TaskScreen = props => {
       pan.flattenOffset();
     },
   });
-
+  const card_style_by_priority = index => {
+    if(todoContext.taskInfo[index].priority =='High'){
+      return styles.card_high_priority
+    } else {
+      return styles.card
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.underLine} />
+      <View style={styles.taskStyle_infoView}>
+        <Text style={styles.taskStyle_info_text}> Task 상태 : </Text>
+        <View style={styles.taskStyle_info_High}>
+          <Text style={styles.taskStyle_info_text}>High</Text>
+        </View> 
+        <View style={styles.taskStyle_info_performed}>
+          <Text style={styles.taskStyle_info_text}>Completed</Text>
+        </View> 
+      </View>
       {todoContext.taskInfo.length < 1 ? (
         //Task가 없는 경우 : Add to task 그림을 출력
         <TouchableOpacity onPress={props.addModal}>
@@ -73,11 +89,12 @@ export const TaskScreen = props => {
           onSwipeValueChange={props.onSwipeValueChange} //터치 이벤트 발생
           useNativeDriver={false} // Native Driver사용 여부, 필수
           renderItem={({ index }) => (
-            <Card 
+            <Card
               style={
-              todoContext.taskInfo[index].performed == 0  //Task 미완료 True or false
-              ? styles.card
-              : styles.card_perfomed}>
+                todoContext.taskInfo[index].performed == 0 //Task 미완료 True or false
+                  ? card_style_by_priority(index)
+                  : styles.card_perfomed
+              }>
               <TouchableOpacity
                 onPress={() => props.getTaskDetail(index)}
                 style={styles.rowFront}>
@@ -87,7 +104,9 @@ export const TaskScreen = props => {
                     { height: props.rowTranslateAnimatedValues[index] },
                   ]}>
                   {todoContext.task_exp[index] < today.getTime() ? ( //만료된 Task - Text
-                    <Text style={styles.taskCont_not_expired_text}>=== 만 료 ===</Text>
+                    <Text style={styles.taskCont_not_expired_text}>
+                      === 만 료 ===
+                    </Text>
                   ) : (
                     <></>
                   )}
@@ -105,7 +124,11 @@ export const TaskScreen = props => {
                         {todoContext.taskInfo[index].task_name}
                       </Text>
                       <Text style={styles.taskPrior}>
-                        [ {todoContext.taskInfo[index].priority} ]
+                        [
+                        {todoContext.taskInfo[index].priority == null
+                          ? 'Middle'
+                          : todoContext.taskInfo[index].priority}
+                        ]
                       </Text>
                     </View>
                     <View style={styles.task2nd}>
@@ -114,7 +137,12 @@ export const TaskScreen = props => {
                       </Text>
                       <TouchableOpacity
                         style={styles.completeBtnView}
-                        onPress={() => props.complete(index,todoContext.taskInfo[index].task_no)}>
+                        onPress={() =>
+                          props.complete(
+                            index,
+                            todoContext.taskInfo[index].task_no,
+                          )
+                        }>
                         <Text style={styles.completeTextView}>
                           {todoContext.taskInfo[index].performed == 0 //Task 미완료 True or false
                             ? '완료'

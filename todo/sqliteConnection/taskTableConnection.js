@@ -71,6 +71,7 @@ export const DELETE_TASK = task_no => {
 
 export const UPDATE_TASK = taskInfo => {
   console.log('UPDATE TASK ARG CHECK' + JSON.stringify(taskInfo));
+  console.log(taskInfo.priority)
   DB.transaction(tx => {
     tx.executeSql(
       //상위 컴포넌트에서 호출시킨 task_no의 데이터를 Update
@@ -117,6 +118,7 @@ export const SELECT_TASK_BY_TASKNO = async task_no => {
 //유저번호를 통한 taskList 검색
 export const SELECT_TASKLIST_BY_USERNO = async user_no => {
   const task_data = [];
+  let priority=null
   const taskList_from_db = () => {
     return new Promise((resolve, reject) => {
       DB.transaction(tx => {
@@ -130,15 +132,15 @@ export const SELECT_TASKLIST_BY_USERNO = async user_no => {
             } else if (len > 0) {
               for (let i = 0; i < len; i++) {
                 //context에 조회된 데이터 row수만큼 배열 생성
-                let priority = res.rows.item(0).priority;
-                if (priority == undefined) {
+                priority = res.rows.item(0).priority;
+                if (priority == undefined || priority == null) {
                   priority = 'Middle';
                 }
                 task_data[i] = {
                   task_no: res.rows.item(i).task_no,
                   user_no: user_no,
                   task_name: res.rows.item(i).task_name,
-                  priority: priority,
+                  priority: res.rows.item(i).priority,
                   exp: res.rows.item(i).exp,
                   exp_date: res.rows.item(i).exp_date,
                   performed: res.rows.item(i).performed,

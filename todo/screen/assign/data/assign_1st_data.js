@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ID_DUPLICATION_CHECK } from '../../../sqliteConnection/userTableConnection';
-import OneButtonModal from '../../../modal/OneButtonModal';
+import OneButtonModal from '../../../component/OneButtonModal';
 import AssignScreen_1st from '../view/assign_1st';
 
 export default Assign_1st_data = ({ navigation }) => {

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import {
+  BISQUE,
   GAINSBORO,
   LIGHT_SALMON,
   MIDNIGHT_BLUE,
@@ -41,6 +42,17 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 10 * DPW,
     marginBottom: 15 * DPW,
+  },
+  card_high_priority: {
+    shadowOpacity: 0.5,
+    elevation: 7,
+    height: 180 * DPW,
+    width: 550 * DPW,
+    alignSelf: 'center',
+    marginTop: 10 * DPW,
+    marginBottom: 15 * DPW,
+    backgroundColor: BISQUE,
+    opacity: 0.8,
   },
   card_perfomed: {
     shadowOpacity: 0.5,
@@ -163,6 +175,37 @@ export const styles = StyleSheet.create({
     backgroundColor: PALETUR,
     width: '100%',
     alignSelf: 'center',
+  },
+  taskStyle_info_High: {
+    backgroundColor: BISQUE,
+    width: 200 * DPW,
+    height: 60 * DPW,
+    marginBottom: 10 * DPW,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal:10 * DPW,
+
+  },
+  taskStyle_info_text : {
+    fontFamily: 'BMJUA',
+    color: MIDNIGHT_BLUE,
+    fontSize: 35 * DPW,
+    textAlignVertical:'center'
+  },
+  taskStyle_info_performed: {
+    backgroundColor: GAINSBORO,
+    width: 200 * DPW,
+    height: 60 * DPW,
+    marginBottom: 10 * DPW,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal:10 * DPW,
+  },
+  taskStyle_infoView: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 20 * DPW,
+    right:50 * DPW,
   },
   bottomLine: {
     height: 20 * DPW,

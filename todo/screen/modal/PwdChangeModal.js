@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {  View,  Text,  TextInput,  TouchableOpacity,   } from 'react-native';
 import Modal from 'react-native-modal';
 import { styles } from './styles/pwdChangeModalStyle'
-import OneButtonModal from '../../modal/OneButtonModal';
+import OneButtonModal from '../../component/OneButtonModal';
 
 export const PwdChangeModal = props => {
   const [pwdInput, setPwdInput] = useState();

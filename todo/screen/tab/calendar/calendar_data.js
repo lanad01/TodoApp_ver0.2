@@ -2,11 +2,11 @@ import React from 'react';
 
 import { View, Text, TouchableOpacity } from 'react-native';
 import moment from 'moment';
-import OneButtonModal from '../../../modal/OneButtonModal';
+import OneButtonModal from '../../../component/OneButtonModal';
 import { AuthContext } from '../../../context/authcontext';
 import { SELECT_EXP_DATE_OF_TASKS } from '../../../sqliteConnection/taskTableConnection';
 import { TodoContext } from '../../../context/todoContext';
-import { Loading } from '../../../modal/Loading';
+import { Loading } from '../../../component/Loading';
 import { styles } from './calendarStyle';
 import TasksByDateModal from '../../modal/TasksByDateModal';
 import Calendar from './calendar';
@@ -99,14 +99,19 @@ const Calendar_Data = ({ navigation }) => {
                     }>
                     <TouchableOpacity
                       onPress={() => taskCheck(days.format('YYYY-MM-DD'))}> 
+                      <Text style={styles.taskMark}> T </Text>
                       <Text style={styles.daysText}>{days.format('D')}</Text>
                     </TouchableOpacity>
                   </View>
                 );
               } else { //이외의 이번달 날짜들은 하얀색으로 출력
                 return (
+                  
                   <View key={index} style={styles.days_this_month}>
+                    <TouchableOpacity
+                      onPress={() => taskCheck(days.format('YYYY-MM-DD'))}> 
                     <Text style={styles.daysText}>{days.format('D')}</Text>
+                    </TouchableOpacity>
                   </View>
                 );
               }

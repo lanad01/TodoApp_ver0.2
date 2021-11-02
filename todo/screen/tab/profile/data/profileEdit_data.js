@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { AuthContext } from '../../../../context/authcontext';
 import { PwdChangeModal } from '../../../modal/PwdChangeModal';
 import { UPDATE_USER_INFO } from '../../../../sqliteConnection/userTableConnection';
-import OneButtonModal from '../../../../modal/OneButtonModal';
+import OneButtonModal from '../../../../component/OneButtonModal';
 import { ProfileChooseModal } from '../../../modal/ProfileChooseModal';
 import ProfileEdit from '../view/profileEdit';
 

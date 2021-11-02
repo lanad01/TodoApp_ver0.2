@@ -1,7 +1,7 @@
 import React from 'react';
 import {  View,} from 'react-native';
 import { AuthContext } from '../../../../context/authcontext';
-import OneButtonModal from '../../../../modal/OneButtonModal';
+import OneButtonModal from '../../../../component/OneButtonModal';
 import { RESET_PWD } from '../../../../sqliteConnection/userTableConnection';
 import { ProfileResetPwd } from '../view/profileResetPwd';
 

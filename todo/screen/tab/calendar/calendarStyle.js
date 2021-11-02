@@ -54,7 +54,6 @@ export const styles = StyleSheet.create({
       paddingTop: 16 * DPW,
       opacity: 0.7,
     },
-    daysText: {},
     weekend: {
       fontSize: 42 * DPW,
       color: 'red',
@@ -92,6 +91,15 @@ export const styles = StyleSheet.create({
       fontSize: 42 * DPW,
       fontFamily: 'BMJUA',
       alignSelf: 'center',
+    },
+    taskMark:{
+      fontFamily:'BMJUA',
+      color:'red',
+      fontSize: 30 * DPW,
+      position:'absolute',
+      right:0,
+      bottom:25,
+      backgroundColor:'yellow',
     },
     mark_info: {
       flexDirection: 'row',

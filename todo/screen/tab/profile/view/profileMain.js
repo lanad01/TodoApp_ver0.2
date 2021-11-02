@@ -4,6 +4,7 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import { AuthContext } from '../../../../context/authcontext';
 import { styles } from '../style/profileMainStyle';
 import { HEIGHT } from '../../../../config/dp';
+import ActionButton from 'react-native-action-button';
 
 export const ProfileMain = props  => {
   const authContext = React.useContext(AuthContext);
@@ -26,10 +27,9 @@ export const ProfileMain = props  => {
             />
             <Text style={styles.nameText}> {authContext.name} </Text>
             <Text style={styles.emailText}>
-              {' '}
               {authContext.email === null
                 ? authContext.emailNull
-                : authContext.email}{' '}
+                : authContext.email}
             </Text>
             <TouchableOpacity onPress={props.goToEdit} style={styles.editBox}>
               <Text style={styles.editText}> 프로필 수정 </Text>
@@ -58,6 +58,7 @@ export const ProfileMain = props  => {
         </View>
       </View>
       
+     
     </GestureRecognizer>
   );
 };

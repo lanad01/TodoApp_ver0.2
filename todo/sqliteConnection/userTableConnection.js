@@ -13,7 +13,6 @@ export const DB = SQLite.openDatabase(
   },
 );
 
-
 export const CREATE_USER_TABLE = () =>
   DB.transaction(tx => {
     tx.executeSql(
@@ -125,12 +124,14 @@ export const INSERT_USER_BY_SOCIAL_LOGIN = async (userInfo, type) => {
     email: '',
     image: null,
   };
-  if (type == 'google') { //구글일 경우 info 얻기
+  if (type == 'google') {
+    //구글일 경우 info 얻기
     user_data.id = userInfo.user.id;
     user_data.email = userInfo.user.email;
     user_data.name = userInfo.user.name;
     user_data.image = null;
-  } else if (type == 'kakao') { // 카카오일 경우 info 얻기
+  } else if (type == 'kakao') {
+    // 카카오일 경우 info 얻기
     user_data.id = userInfo.id;
     user_data.name = userInfo.nickname;
     user_data.email = userInfo.email;
@@ -209,8 +210,7 @@ export const LOGIN_VALIDATION = async (id, pwd) => {
   const dupCount = await id_pwd_check();
   console.log('user_data promise  ' + dupCount);
   return dupCount;
-}
-  
+};
 
 //비밀번호 재설정
 export const RESET_PWD = (user_no, newPwd) => {
@@ -228,7 +228,6 @@ export const RESET_PWD = (user_no, newPwd) => {
     );
   });
 };
-
 
 //유저번호를 통한 유저정보 검색
 export const SELECT_USER_INFO_BY_USERNO = async user_no => {
@@ -285,7 +284,7 @@ export const SELECT_USER_INFO_BY_ID = async id => {
     user_no: 0,
   };
   const get_user_data = async () => {
-    return new Promise( async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       await DB.transaction(tx => {
         tx.executeSql(
           'SELECT id, pwd, job, name, email, image, regi_date, job, user_no FROM user_info WHERE id=?',
@@ -312,8 +311,32 @@ export const SELECT_USER_INFO_BY_ID = async id => {
   return user_data_from_db;
 };
 
-
-
+export const SELECT_FRIENDS = async (authContext) => {
+  let user_data = []
+  const get_frineds_data = async () => {
+    return new Promise(async (resolve, reject) => {
+      await DB.transaction(tx => {
+        tx.executeSql(
+          'SELECT name, image FROM user_info',
+          [],
+          (tx, res) => {
+            let lenghth = res.rows.length
+            for(let i=0 ; i < lenghth ; i++){
+              user_data[i] = {
+                image : res.rows.item(i).image,
+                name : res.rows.item(i).name
+              }
+            }
+            resolve(user_data)
+          },
+        );
+      });
+    });
+  }
+  
+  const friends_data = await get_frineds_data()
+  return friends_data
+};
 
 export const DELETE_TEMP = () => {
   DB.transaction(tx => {
