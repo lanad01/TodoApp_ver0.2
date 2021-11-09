@@ -1,36 +1,35 @@
 import React from 'react';
-import {  View,  Text,  StyleSheet,  TouchableOpacity,  } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
+import { BLUE10, BLUE20, MIDNIGHT_BLUE, RED, WHITE } from '../config/color';
 import { DPW } from '../config/dp';
 
-const TwoButtonModal = (props) => {
+const TwoButtonModal = props => {
   //two btn modal
-  
+
   return (
     <Modal
       isVisible={props.modalOn}
       avoidKeyboard={true}
       transparent={true}
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View style={styles.outside}>
-          <View style={styles.validModal}>
-            <Text style={styles.validText}>{props.message}</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={styles.choicebox}
-                onPress={props.modalOff}>
-                <Text textAlign="center" style={styles.btn}>
-                  돌아가기
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.choicebox} onPress={props.exitAppImple}>
-                <Text textAlign="center" style={styles.btn}>
-                  종 료
-                </Text>
-              </TouchableOpacity>
-            </View>
+      <View style={styles.outside}>
+        <View style={styles.validModal}>
+          <Text style={styles.validText}>{props.message}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity style={styles.choicebox} onPress={props.modalOff}>
+              <Text textAlign="center" style={styles.cancelBtn}>
+                취 소
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.choicebox} onPress={() => props.confirm('Pa')}>
+              <Text textAlign="center" style={styles.btn}>
+                확 인
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
+      </View>
     </Modal>
   );
 };
@@ -52,12 +51,27 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'BMJUA',
     fontSize: 36 * DPW,
-    backgroundColor: 'white',
+    backgroundColor: BLUE20,
     borderRadius: 7,
-    borderWidth: 5,
-    width: 240 * DPW,
-    paddingTop: 20 * DPW,
-    marginHorizontal: 26 * DPW,
+    borderWidth: 2,
+    width: 200 * DPW,
+    marginHorizontal: 11 * DPW,
+    paddingVertical: 10*DP,
+    color: WHITE,
+    textAlignVertical:'center'
+  },
+  cancelBtn: {
+    textAlign: 'center',
+    fontFamily: 'BMJUA',
+    fontSize: 36 * DPW,
+    backgroundColor: RED,
+    borderRadius: 7,
+    borderWidth: 2,
+    width: 200 * DPW,
+    marginHorizontal: 11 * DPW,
+    paddingVertical:10*DP,
+    color: WHITE,
+    textAlignVertical:'center',
   },
   validModal: {
     width: 600 * DPW,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Animated,  Dimensions,  View, } from 'react-native';
+import { Animated, Dimensions, View } from 'react-native';
 
 import { GuideModal } from '../../../modal/GuideModal';
 import { TaskDetailModal } from '../../../modal/TaskDetailModal';
@@ -41,8 +41,12 @@ export const TaskScreen_Data = ({ navigation }) => {
       const taskList = await SELECT_TASKLIST_BY_USERNO(authContext.user_no);
       taskList.map((v, i) => {
         todoContext.taskInfo[i] = v; //context와 동기화
-        const split=v.exp_date.split('-')
-        todoContext.task_exp[i]=new Date(split[0], split[1]-1, split[2]).getTime()
+        const split = v.exp_date.split('-');
+        todoContext.task_exp[i] = new Date(
+          split[0],
+          split[1] - 1,
+          split[2],
+        ).getTime();
         setList(); //애니메이션 용 배열 정보를 각 iteration마다 추가하는 메소드
       });
     };
@@ -66,7 +70,7 @@ export const TaskScreen_Data = ({ navigation }) => {
     todoContext.taskInfo.splice(i, 1); //배열정보에서 삭제
   };
 
-  //각 Task마다 Animated Value 
+  //각 Task마다 Animated Value
   Array(todoContext.taskInfo.length)
     //각 List row에 해당하는 Animated.Value 생성 - 이 부분은 Hook이 아니라 배열로 가능
     .fill('')
@@ -75,7 +79,7 @@ export const TaskScreen_Data = ({ navigation }) => {
     });
 
   //애니메이션 전용 Array
-  const [listData, setListData] = React.useState(); 
+  const [listData, setListData] = React.useState();
   const setList = () => {
     // task의 숫자만큼 배열 : key - index / text - 해당 task의 기본키
     setListData(
@@ -117,25 +121,27 @@ export const TaskScreen_Data = ({ navigation }) => {
         }, 500); //여기서 timeOut을 주지 않으면 ListData와 newData사이의 간극이 생겨
         // undefined가 생겨버린다.
         setLoading(true);
-        deleteTask(key, listData[key].text);                            
+        deleteTask(key, listData[key].text);
         animationIsRunning.current = false;
         setLoading(false);
-      });            
+      });
     }
   };
 
   //완료처리
-  const complete = async (index, task_no) => {     
-    UPDATE_TASK_PERFORMED(task_no)
-    todoContext.taskInfo[index].performed=true   
-  }                                                                                             
-  return (                                              
-    <View style={{flex:1}}>                                                          
+  const complete = async (index, task_no) => {
+    UPDATE_TASK_PERFORMED(task_no);
+    todoContext.taskInfo[index].performed = true;
+  };
+  return (
+    <View style={{ flex: 1 }}>
       <TaskScreen
         addModal={() => setAddModal(true)}
         listData={listData}
         onSwipeValueChange={onSwipeValueChange}
-        getTaskDetail={ index => getTaskDetail(todoContext.taskInfo[index].task_no)}
+        getTaskDetail={index =>
+          getTaskDetail(todoContext.taskInfo[index].task_no)
+        }
         rowTranslateAnimatedValues={rowTranslateAnimatedValues}
         complete={complete}
       />

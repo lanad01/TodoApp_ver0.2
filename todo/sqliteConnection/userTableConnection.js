@@ -317,8 +317,8 @@ export const SELECT_FRIENDS = async (authContext) => {
     return new Promise(async (resolve, reject) => {
       await DB.transaction(tx => {
         tx.executeSql(
-          'SELECT name, image FROM user_info',
-          [],
+          'SELECT name, image FROM user_info WHERE id!=?',
+          [authContext.id],
           (tx, res) => {
             let lenghth = res.rows.length
             for(let i=0 ; i < lenghth ; i++){
